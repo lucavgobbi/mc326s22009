@@ -12,9 +12,15 @@ void TestCfg()
 	c = cfg;
 	while(c != NULL)
 	{
-		printf("%s, %c, %d\n", c->name, c->type, c->initialPosition);
+		printf("%s, %c, %d, %d, %c, %s\n", c->name, c->type, c->initialPosition, c->finalPosition, c->notNull, c->msg);
 		c = c->next;
 	}
+}
+
+/*Retorna a lista de config*/
+InputConfiguration *GetConfig()
+{
+	return cfg;
 }
 
 /*Insere na lista a nova cfgucao*/
@@ -22,7 +28,7 @@ InputConfiguration *CreateInputConfiguration(int totalSize, char string[500])
 {
 	InputConfiguration *new;
 	int separators[6]; /*Guarda a posição onde serão estão os separadores*/
-	char *name;
+	char *name, *msg;
 	/*char *msg;*/
 	char *temp;
 	int i, j;/*, initialPosition, finalPosition;*/
@@ -51,12 +57,32 @@ InputConfiguration *CreateInputConfiguration(int totalSize, char string[500])
 	new->type = string[0];
 	string = string + 2;
 	
-	/*Le o tamanho*/
-	temp = (char*)malloc((separators[2] - separators[1] + 1)*sizeof(char));
-	strncpy(temp,string,separators[2] - separators[1]);
-	temp[separators[2] - separators[1] + 1] = '\0';
-	new->initialPosition = (int)temp;
-	string = string + separators[2] - separators[1] + 1;
+	/*Le a posição inicial*/
+	temp = (char*)malloc((separators[2] - separators[1])*sizeof(char));
+	strncpy(temp,string,separators[2] - separators[1] - 1);
+	temp[separators[2] - separators[1]] = '\0';
+	new->initialPosition = atoi(temp);
+	string = string + separators[2] - separators[1];
+	free(temp);
+
+	/*Le a posição Final*/
+	temp = (char*)malloc((separators[3] - separators[2])*sizeof(char));
+	strncpy(temp,string,separators[3] - separators[2] - 1);
+	temp[separators[3] - separators[2]] = '\0';
+	new->finalPosition = atoi(temp);
+	string = string + separators[3] - separators[2];
+	free(temp);
+
+	/*Le a obrigatoriedade*/
+	new->notNull = string[0];
+	string = string + separators[4] - separators[3];
+
+	/*Le o msg*/
+	msg = (char*)malloc((separators[5] - separators[4])*sizeof(char));
+	strncpy(msg,string,strlen(string));
+	
+	new->msg = msg;
+
 	return new;
 }
 
@@ -88,7 +114,6 @@ void LoadInputConfiguration(char *filePath)
 			{
 				if(list == NULL)
 				{
-					printf("Entrou");
 					list = CreateInputConfiguration(stringSize, temp);
 					aux = list;
 				}

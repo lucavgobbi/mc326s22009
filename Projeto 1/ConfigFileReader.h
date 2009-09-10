@@ -8,6 +8,10 @@ typedef struct InputConfiguration{
 	struct InputConfiguration *next;
 }InputConfiguration;
 
+/*Carrega as configurações*/
 void LoadInputConfiguration(char *filePath);
 
 void TestCfg();
+
+/*Retorna a lista de config*/
+InputConfiguration *GetConfig();
