@@ -15,7 +15,7 @@ void ConvertFile(char *inputFile, char *outputFile, InputConfiguration *inputCon
 
 }
 
-/*Função que lista o arquivo de forma fixa*/
+/*Função que lista o arquivo de forma fixa, implementar*/
 void ListFileFixed(char *inputFile, InputConfiguration *inputConfiguration)
 {
 
