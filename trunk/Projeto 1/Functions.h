@@ -9,5 +9,6 @@ void ConvertFile(char *inputFile, char *outputFile, InputConfiguration *inputCon
 
 /*Função que lista o arquivo de forma fixa*/
 void ListFileFixed(char *inputFile, InputConfiguration *inputConfiguration);
+
 /*Função que lista o arquivo de forma variavel*/
 void ListFileVariable(char *inputFile, InputConfiguration *inputConfiguration);

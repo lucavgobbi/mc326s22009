@@ -27,6 +27,7 @@ int main(int argc, char * argv[])
 {
 	/*Variaveis*/
 	char menuOption; /*Guarda o valor digitado*/
+	char outputPath[100];
 
 	/*Carrega as configurações*/
 	if(!LoadConfig())
@@ -43,7 +44,7 @@ int main(int argc, char * argv[])
 		return 0;
 	}
 
-
+	LoadInputConfiguration(argv[1]);
 
 	/*Mantem o menu em loop até que a opção de saida seja digitada*/
 	menuOption = Menu();
@@ -51,9 +52,20 @@ int main(int argc, char * argv[])
 	{
 		switch (menuOption)
 		{
-			case '1' : break;
-			case '2' : break;
-			case '3' : break;
+			case '1' : 
+				{
+					printf(Translate("AskOutPath"));
+					scanf("%s", outputPath);
+					ConvertFile(argv[1], outputPath, GetConfig());
+				}break;
+			case '2' :
+				{
+					ListFileFixed(argv[1], GetConfig());
+				} break;
+			case '3' : 
+				{
+					ListFileVariable(argv[1], GetConfig());
+				} break;
 		}
 		menuOption = Menu();
 	}

@@ -90,5 +90,5 @@ char *Translate(char *key)
 			aux = aux->next;
 		}
 	}
-	return "Not Found";
+	return key;
 }
