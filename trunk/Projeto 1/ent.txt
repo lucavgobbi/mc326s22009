@@ -1,0 +1,4 @@
+RA|N|1|6|S|RA Obrigatorio
+Nome|X|8|24|S|Nome Obrigatorio
+Idade|X|8|24|S|Nome Obrigatorio
+Teste|X|8|24|S|Nome Obrigatorio
