@@ -2,10 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "Translator.h"
-#include "ConfigManager.h"
-#include "ErrorHandler.h"
-#include "ConfigFileReader.h"
+#include "Functions.h"
+
 
 /*Função responsavel por imprimir o menu e retornar apenas uma opção valida*/
 char Menu()
@@ -45,9 +43,7 @@ int main(int argc, char * argv[])
 		return 0;
 	}
 
-	LoadInputConfiguration(argv[1]);
 
-	TestCfg();
 
 	/*Mantem o menu em loop até que a opção de saida seja digitada*/
 	menuOption = Menu();
