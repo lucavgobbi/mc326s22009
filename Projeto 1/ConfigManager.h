@@ -1,10 +1,10 @@
 typedef struct cfg{
-	char *traslateFile;
+	char *translateFile;
 	char *separator;
 }cfg;
 
 int LoadConfig();
 
-char *traslateFile();
+char *translateFile();
 
 char *separator();

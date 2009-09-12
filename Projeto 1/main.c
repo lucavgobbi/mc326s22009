@@ -36,7 +36,7 @@ int main(int argc, char * argv[])
 	}
 
 	/*Carrega as traduções*/
-	LoadTranslation(traslateFile());
+	LoadTranslation(translateFile());
 
 	/*Verificação dos parametros de entrada*/
 	if(Error_InputParameters(argc, argv))
