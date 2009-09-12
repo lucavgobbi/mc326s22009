@@ -9,7 +9,7 @@ O padrão de nome é Error_Descrição da verificação*/
 
 int Error_InputParameters(int argc, char * argv[])
 {
-	if(argc != 2)
+	if(argc != 3)
 	{
 		printf("Invalid Parameters");
 		return 1;
