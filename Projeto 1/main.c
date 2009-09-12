@@ -56,15 +56,15 @@ int main(int argc, char * argv[])
 				{
 					printf(Translate("AskOutPath"));
 					scanf("%s", outputPath);
-					ConvertFile(argv[1], outputPath, GetConfig());
+					ConvertFile(argv[2], outputPath, GetConfig());
 				}break;
 			case '2' :
 				{
-					ListFileFixed(argv[1], GetConfig());
+					ListFileFixed(argv[2], GetConfig());
 				} break;
 			case '3' : 
 				{
-					ListFileVariable(argv[1], GetConfig());
+					ListFileVariable(argv[2], GetConfig());
 				} break;
 		}
 		menuOption = Menu();
