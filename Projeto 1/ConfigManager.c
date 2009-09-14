@@ -20,7 +20,7 @@ int LoadConfig()
 	}
 	else
 	{
-		printf("Configuration file not found.");
+		printf("Configuration file not found.\n");
 		return 0;
 	}
 	fclose(file);
