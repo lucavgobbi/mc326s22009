@@ -1,4 +1,5 @@
-RA|N|143|6|S|RA Obrigatorio
-Nome|X|82|24|S|Nome Obrigatorio
-Idade|X|822|24|N|ABC Obrigatorio
-Teste|X|867|24|S|Nome Obrigatorio
+RA|N|1|6|S|RA Obrigatorio
+Nome|X|8|31|S|Nome Obrigatorio
+Cidade|X|32|46|N|Cidade Nao Obrigatorio
+Telefone|X|47|54|S|Telefone Obrigatorio
+FimRegistro|X|55|55|S|#

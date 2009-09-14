@@ -96,6 +96,7 @@ void LoadInputConfiguration(char *filePath)
 	char temp[500]; /*Vetor temporario onde serao armazenadas as string*/
 	file = fopen(filePath, "r");
 	list = NULL;
+
 	if (file != NULL)
 	{
 		while(!feof(file))
