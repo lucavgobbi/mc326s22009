@@ -1,4 +1,4 @@
-/*Aqui serão implementados os metodos que irão ler a tabela de configurações de entrada*/
+/*Aqui serï¿½o implementados os metodos que irï¿½o ler a tabela de configuraï¿½ï¿½es de entrada*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,9 +27,9 @@ InputConfiguration *GetConfig()
 InputConfiguration *CreateInputConfiguration(int totalSize, char string[500])
 {
 	InputConfiguration *new;
-	int separators[6]; /*Guarda a posição onde serão estão os separadores*/
-	char *name, *msg;
-	/*char *msg;*/
+	int separators[6]; /*Guarda a posiï¿½ï¿½o onde serï¿½o estï¿½o os separadores*/
+	char *name;
+	char *msg;
 	char *temp;
 	int i, j;/*, initialPosition, finalPosition;*/
 	i = 0;
@@ -57,7 +57,7 @@ InputConfiguration *CreateInputConfiguration(int totalSize, char string[500])
 	new->type = string[0];
 	string = string + 2;
 	
-	/*Le a posição inicial*/
+	/*Le a posiï¿½ï¿½o inicial*/
 	temp = (char*)malloc((separators[2] - separators[1])*sizeof(char));
 	strncpy(temp,string,separators[2] - separators[1] - 1);
 	temp[separators[2] - separators[1]] = '\0';
@@ -65,7 +65,7 @@ InputConfiguration *CreateInputConfiguration(int totalSize, char string[500])
 	string = string + separators[2] - separators[1];
 	free(temp);
 
-	/*Le a posição Final*/
+	/*Le a posiï¿½ï¿½o Final*/
 	temp = (char*)malloc((separators[3] - separators[2])*sizeof(char));
 	strncpy(temp,string,separators[3] - separators[2] - 1);
 	temp[separators[3] - separators[2]] = '\0';
@@ -79,7 +79,7 @@ InputConfiguration *CreateInputConfiguration(int totalSize, char string[500])
 
 	/*Le o msg*/
 	msg = (char*)malloc((separators[5] - separators[4])*sizeof(char));
-	strncpy(msg,string,strlen(string));
+	strncpy(msg,string,strlen(string)-2);
 	
 	new->msg = msg;
 
@@ -87,7 +87,7 @@ InputConfiguration *CreateInputConfiguration(int totalSize, char string[500])
 }
 
 
-/*Retorna uma lista com as chaves e valores vindas do arquivo de cfgucao, Parametro é o caminho do arquivo*/
+/*Retorna uma lista com as chaves e valores vindas do arquivo de cfgucao, Parametro ï¿½ o caminho do arquivo*/
 void LoadInputConfiguration(char *filePath)
 {
 	FILE *file;
@@ -110,7 +110,7 @@ void LoadInputConfiguration(char *filePath)
 			}
 			while (temp[stringSize] != '\n' && !feof(file));
 			temp[stringSize+1] = '\0';
-			/*Ao chegar ao final da linha aloca a memória e insere na lista*/
+			/*Ao chegar ao final da linha aloca a memï¿½ria e insere na lista*/
 			if(!feof(file))
 			{
 				if(list == NULL)

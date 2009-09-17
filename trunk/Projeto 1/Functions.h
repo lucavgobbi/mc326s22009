@@ -2,13 +2,20 @@
 #include "ConfigManager.h"
 #include "ErrorHandler.h"
 #include "ConfigFileReader.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "Define.h"
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
-/*Função que deve ler o arquivo de entrada baseado nas configurações definidas na lista inputConfioguration
+/*Funï¿½ï¿½o que deve ler o arquivo de entrada baseado nas configuraï¿½ï¿½es definidas na lista inputConfioguration
 e escrever o arquivo de saida em outputfile, lembrando sempre de utilizar o separador dinamico que pode ser obtido com, (char)separator()[0]*/
 void ConvertFile(char *inputFile, char *outputFile, InputConfiguration *inputConfiguration);
 
-/*Função que lista o arquivo de forma fixa*/
-void ListFileFixed(char *inputFile, InputConfiguration *inputConfiguration);
+/*Funï¿½ï¿½o que lista o arquivo de forma fixa*/
+void ListFileFixed(FILE *file, InputConfiguration *inputConfiguration);
 
-/*Função que lista o arquivo de forma variavel*/
+/*Funï¿½ï¿½o que lista o arquivo de forma variavel*/
 void ListFileVariable(char *inputFile, InputConfiguration *inputConfiguration);

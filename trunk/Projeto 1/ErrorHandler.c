@@ -3,16 +3,30 @@
 #include <stdlib.h>
 
 /*Classe que manipula os erros, 
-todas as verificações de erros devem ser implementadas aqui, seguindo o seguinte padrão:
-A função deve retornar 0 ou 1, 1 para o caso de erro, e 0 para o caso de sucesso, todas as mensagens de erro devem ser exibidas internamente nesta classe
-O padrão de nome é Error_Descrição da verificação*/
+todas as verificaï¿½ï¿½es de erros devem ser implementadas aqui, seguindo o seguinte padrï¿½o:
+A funï¿½ï¿½o deve retornar 0 ou 1, 1 para o caso de erro, e 0 para o caso de sucesso, todas as mensagens de erro devem ser exibidas internamente nesta classe
+O padrï¿½o de nome ï¿½ Error_Descriï¿½ï¿½o da verificaï¿½ï¿½o*/
 
 int Error_InputParameters(int argc, char * argv[])
 {
 	if(argc != 3)
 	{
-		printf("Invalid Parameters");
+		printf("Incorrect parameters number");
 		return 1;
 	}
 	return 0;
+}
+
+int Error_FileOpen(char * filePath)
+{
+	FILE *file;
+	file = fopen(filePath, "r");
+
+	if (file != NULL)
+	{
+		fclose(file);
+		return 0;
+	}
+	printf("Error while opening file %s", filePath);
+	return 1;
 }

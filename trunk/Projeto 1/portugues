@@ -1,6 +1,13 @@
 Menu1#1. Converter para formato variavel
 Menu2#2. Listar no formato fixo
 Menu3#3. Listar no formato variavel
-MenuError#Opção Inválida
+Menu4#4. Sair
+MenuHeader# Projeto 2:
+MenuError#Opcao Invalida
 AskOutPath#Digite o caminho do arquivo de saida
-
+RegisterSize#O registro tem tamanho %d bytes
+RegisterInit#O registro se inicia na posicao %d
+ValidRegister#O registro e valido
+RemovedRegister#O registro foi removido
+OutputSize#Tamanho do arquivo de saida %d
+InputSize#Tamanho do arquivo de entrada %d
