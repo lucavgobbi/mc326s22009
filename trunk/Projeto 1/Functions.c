@@ -1,14 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "Functions.h"
 
-/*Colocar Mensagens dos printfs e defines nos seus respectivos lugares*/
-
-#define RegisterEnd "#"
 typedef enum {false=0, true=1} Boolean;
 
-/*Função que recebe um campo no formato fixo, as configurações e retorna um ponteiro pra um campo do modo variavel*/
-void FixedToVariable(char *fixed, InputConfiguration *inputConfiguration, char *variable)
+/*Funcao que retorna uma string com o caracter de fim de registro*/
+char *RegisterEnd(InputConfiguration *inputConfiguration){
+
+	InputConfiguration *aux;
+
+	aux = inputConfiguration;
+
+	while(aux->next!=NULL){
+		aux = aux->next;
+	}
+
+	return aux->msg;
+
+}
+
+/*Funcao que recebe um campo no formato fixo, as configuracoes e retorna um ponteiro pra um campo do modo variavel*/
+void FixedToVariable(char *fixed, char *variable)
 {
 	int i,j;
 
@@ -39,8 +52,8 @@ Boolean VerifyRegister()
 	return true;/*Temporario*/
 }
 
-/*Função auxiliar que imprime uma linha com o formato variavel*/
-void PrintFileVar(FILE *input)
+/*Funcao auxiliar que imprime uma linha com o formato variavel*/
+void PrintFileVar(FILE *input, InputConfiguration *inputConfiguration)
 {
 	char caracter;
 	int byteCounter,initialPosition;
@@ -48,12 +61,15 @@ void PrintFileVar(FILE *input)
 	byteCounter = 0;
 	initialPosition = 0;
 
+	caracter = (char)getc(input);
+	printf("\n");
 	while(feof(input)==0){
-		do{
+		printf("%c", caracter);
+		while((caracter!='\n')&&(feof(input)==0)){
 			caracter = (char)getc(input);
 			printf("%c", caracter);
 			byteCounter++;
-		}while(caracter!=(char)RegisterEnd);
+		}
 		printf("o registro se inicia na posicao %d\n", initialPosition);
 		printf("o registro tem tamanho %d bytes\n", byteCounter);
 		if(VerifyRegister()){
@@ -63,51 +79,77 @@ void PrintFileVar(FILE *input)
 			printf("o registro foi removido\n");
 		}
 		printf("\n");
+		initialPosition = initialPosition + byteCounter + 1;
+		byteCounter = 0;
+		caracter = (char)getc(input);
 	}
+
 }
 
-/*Função que deve ler o arquivo de entrada baseado nas configurações definidas na lista inputConfiguration
+/*Funcao que deve ler o arquivo de entrada baseado nas configurações definidas na lista inputConfiguration
 e escrever o arquivo de saida em outputfile, lembrando sempre de utilizar o separador dinamico que pode ser obtido com, (char)separator()[0]*/
 void ConvertFile(char *inputFile, char *outputFile, InputConfiguration *inputConfiguration)
 {
 	FILE *input,*output;
 	InputConfiguration *aux;
 	char *strfix, *strvar;
-	int finalp, initialp;
+	int finalp, initialp, regposition, i;
 
+	regposition = 0;
 	aux = inputConfiguration;
+
+	/*Abre os arquivos*/
 	input = fopen(inputFile,"r");
 	output = fopen(outputFile,"w");
 
+	if((input==NULL)||(output==NULL)){
+		return;
+	}
+
+	/*Aloca memorias*/
+	strfix = (char *)malloc(sizeof(char)*600);
+	strvar = (char *)malloc(sizeof(char)*600);
+
 	while(feof(input)==0){
-		finalp = inputConfiguration->finalPosition;
-		initialp = inputConfiguration->initialPosition;
-		/*Le o campo*/
-		fread(strfix,initialp-finalp+1,1,input);
+		i=0;
+		finalp = aux->finalPosition;
+		initialp = aux->initialPosition;
+		/*Percorre o arquivo ate o inicio do campo*/
+		fseek(input,initialp+regposition-1,SEEK_SET);
+		/*Le o campo fixo*/
+		fread(strfix,finalp-initialp+2,1,input);
+		strfix[finalp-initialp+1]='\0';
 		/*Transforma o campo fixo em variavel*/
-		FixedToVariable(strfix, inputConfiguration, strvar);
+		FixedToVariable(strfix, strvar);
 		/*Escreve o campo variavel no arquivo de saida*/
-		fwrite(strvar,sizeof(strvar),1,output);
-		fwrite(separator(),1,1,output);
-		/*Pula para o proximo campo*/
+		fwrite(strvar,strlen(strvar),1,output);
+		/*Pula para o proximo campo e insere o separador*/
 		if(aux->next!=NULL){
 			aux = aux->next;
-			/*Se for o campo fim de registro, marca e volta do começo*/
-			if(aux->next==NULL){
-				fwrite(RegisterEnd,1,1,output);
-				aux = inputConfiguration;
-			}
+			fwrite(separator(),1,1,output);
+		}
+		/*Se for o campo fim de registro, escreve quebra de linha e volta do começo*/
+		else{
+			fwrite("\n",1,1,output);
+			aux = inputConfiguration;
+			regposition = regposition+finalp+1;
 		}
 	}
+
+	/*Libera memoria e fecha arquivos*/
+	free(strvar);
+	free(strfix);
+	fclose(input);
+	fclose(output);
 }
 
-/*Função que lista o arquivo de forma fixa, implementar*/
+/*Funcao que lista o arquivo de forma fixa, implementar*/
 void ListFileFixed(char *inputFile, InputConfiguration *inputConfiguration)
 {
 
 }
 
-/*Função que lista o arquivo de forma variavel*/
+/*Funcao que lista o arquivo de forma variavel*/
 void ListFileVariable(char *inputFile, InputConfiguration *inputConfiguration)
 {
 	char *outputFile;
@@ -120,6 +162,12 @@ void ListFileVariable(char *inputFile, InputConfiguration *inputConfiguration)
 	ConvertFile(inputFile,outputFile,inputConfiguration);
 	output = fopen(outputFile,"r");
 
-	PrintFileVar(output);
+	if(output==NULL){
+		return;
+	}
+
+	PrintFileVar(output,inputConfiguration);
+
+	fclose(output);
 }
 
