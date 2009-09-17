@@ -4,17 +4,17 @@
 #include <ctype.h>
 #include "Functions.h"
 
-
-/*Função responsavel por imprimir o menu e retornar apenas uma opção valida*/
+/*Funï¿½ï¿½o responsavel por imprimir o menu e retornar apenas uma opï¿½ï¿½o valida*/
 char Menu()
 {
 	char menuOption;
-	printf("Menu:\n\n");
+	printf(Translate("MenuHeader"));
 	printf(Translate("Menu1"));
 	printf(Translate("Menu2"));
 	printf(Translate("Menu3"));
+	printf(Translate("Menu4"));
 	scanf(" %c", &menuOption);
-	/*Fica lendo até que uma opção valida seja digitada*/
+	/*Fica lendo atï¿½ que uma opï¿½ï¿½o valida seja digitada*/
 	while(menuOption < 49 || menuOption > 52)
 	{
 		printf(Translate("MenuError"));
@@ -28,25 +28,26 @@ int main(int argc, char * argv[])
 	/*Variaveis*/
 	char menuOption; /*Guarda o valor digitado*/
 	char outputPath[100];
+	FILE *file;
 
-	/*Carrega as configurações*/
+	/*Carrega as configuraï¿½ï¿½es*/
 	if(!LoadConfig())
 	{
 		return 0;
 	}
 
-	/*Carrega as traduções*/
+	/*Carrega as traduï¿½ï¿½es*/
 	LoadTranslation(translateFile());
 
-	/*Verificação dos parametros de entrada*/
-	if(Error_InputParameters(argc, argv))
+	/*Verificaï¿½ï¿½o*/
+	if(Error_InputParameters(argc, argv) || Error_FileOpen(argv[1]) || Error_FileOpen(argv[2]))
 	{
 		return 0;
 	}
 
 	LoadInputConfiguration(argv[1]);
 
-	/*Mantem o menu em loop até que a opção de saida seja digitada*/
+	/*Mantem o menu em loop atï¿½ que a opï¿½ï¿½o de saida seja digitada*/
 	menuOption = Menu();
 	while(menuOption != '4')
 	{
@@ -60,7 +61,9 @@ int main(int argc, char * argv[])
 				}break;
 			case '2' :
 				{
-					ListFileFixed(argv[2], GetConfig());
+					file = fopen(argv[2], "r");
+					ListFileFixed(file, GetConfig());
+					fclose(file);
 				} break;
 			case '3' : 
 				{
