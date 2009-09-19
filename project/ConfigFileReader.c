@@ -33,12 +33,13 @@ void FreeInputConfiguration()
 			}
 			if(aux->next->name!=NULL)
 			{
-				free(aux->next->name);
-				free(aux->next->msg);
+			/*	free(aux->next->name);
+				free(aux->next->msg);*/
 			}
 			free(aux->next);
 			aux->next = NULL;
 		}
+
 		if(cfg->name!=NULL)
 		{
 			free(cfg->name);
