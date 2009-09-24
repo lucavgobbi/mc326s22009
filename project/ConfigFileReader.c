@@ -163,3 +163,46 @@ void LoadInputConfiguration(char *filePath)
 	fclose(file);
 	cfg = list;
 }
+/*Retorna uma lista com as chaves e valores vindas do arquivo de cfgucao, Parametro � o caminho do arquivo*/
+InputConfiguration *LoadInputConfigurationAux(char *filePath)
+{
+	FILE *file;
+	InputConfiguration *list, *aux;
+	int stringSize;
+	char temp[500]; /*Vetor temporario onde serao armazenadas as string*/
+	file = fopen(filePath, "r");
+	list = NULL;
+
+	if (file != NULL)
+	{
+		while(!feof(file))
+		{
+			stringSize = 0;
+			temp[stringSize] = getc(file);
+			do
+			{
+				stringSize++;
+				temp[stringSize] = getc(file);
+			}
+			while (temp[stringSize] != '\n' && !feof(file));
+			temp[stringSize+1] = '\0';
+			/*Ao chegar ao final da linha aloca a mem�ria e insere na lista*/
+			if(!feof(file))
+			{
+				if(list == NULL)
+				{
+					list = CreateInputConfiguration(stringSize, temp);
+					aux = list;
+				}
+				else
+				{
+					aux->next = CreateInputConfiguration(stringSize, temp);
+					aux = aux->next;
+					aux->next = NULL;
+				}
+			}
+		}
+	}
+	fclose(file);
+	return list;
+}

@@ -11,6 +11,8 @@ typedef struct InputConfiguration{
 /*Carrega as configura��es*/
 void LoadInputConfiguration(char *filePath);
 
+InputConfiguration *LoadInputConfigurationAux(char *filePath);
+
 void TestCfg();
 
 void FreeInputConfiguration();

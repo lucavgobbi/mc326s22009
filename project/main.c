@@ -15,7 +15,7 @@ char Menu()
 	printf(Translate("Menu4"));
 	scanf(" %c", &menuOption);
 	/*Fica lendo at� que uma op��o valida seja digitada*/
-	while(menuOption < 49 || menuOption > 52)
+	while(menuOption < 48 || menuOption > 56)
 	{
 		printf(Translate("MenuError"));
 		scanf(" %c", &menuOption);	
@@ -48,7 +48,7 @@ int main(int argc, char * argv[])
 
 	/*Mantem o menu em loop at� que a op��o de saida seja digitada*/
 	menuOption = Menu();
-	while(menuOption != '4')
+	while(menuOption != '0')
 	{
 		switch (menuOption)
 		{
@@ -68,6 +68,14 @@ int main(int argc, char * argv[])
 			case '3' : 
 				{
 					ListFileVariable(argv[2], GetConfig());
+				} break;
+			case '8' : 
+				{
+					PrintIndex("index");
+				} break;
+			case '9' : 
+				{
+					PrintIndex("indexsort");;
 				} break;
 		}
 		menuOption = Menu();

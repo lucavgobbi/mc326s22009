@@ -184,7 +184,7 @@ void Printer(char *info, char *field)
         printf("%s", info);
         printf("\n");
         return;
-}
+} 
 
 /*Fun��o que lista o arquivo de forma fixa, implementar*/
 void ListFileFixed(char *inputFile, InputConfiguration *inputConfiguration)
@@ -234,3 +234,11 @@ void ListFileFixed(char *inputFile, InputConfiguration *inputConfiguration)
         return;
 }
 
+void PrintIndex(char * filePath)
+{
+	InputConfiguration *tmpCfg;
+	tmpCfg = LoadInputConfigurationAux("index.dat");
+	ListFileFixed(filePath, tmpCfg);
+	
+	
+}
