@@ -18,5 +18,7 @@ void ConvertFile(char *inputFile, char *outputFile, InputConfiguration *inputCon
 void ListFileFixed(char *inputFile, InputConfiguration *inputConfiguration);
 
 /*Fun��o que lista o arquivo de forma variavel*/
-void ListFileVariable(char *inputFile, InputConfiguration *inputConfiguration)
-	;
+void ListFileVariable(char *inputFile, InputConfiguration *inputConfiguration);
+
+void PrintIndex(char * filePath);
+
