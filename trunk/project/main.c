@@ -13,6 +13,8 @@ char Menu()
 	printf(Translate("Menu2"));
 	printf(Translate("Menu3"));
 	printf(Translate("Menu4"));
+	printf(Translate("Menu6"));
+	printf(Translate("Menu7"));
 	scanf(" %c", &menuOption);
 	/*Fica lendo at� que uma op��o valida seja digitada*/
 	while(menuOption < 48 || menuOption > 56)
@@ -57,7 +59,7 @@ int main(int argc, char * argv[])
 					printf(Translate("AskOutPath"));
 					scanf("%s", outputPath);
 					ConvertFile(argv[2], outputPath, GetConfig());
-				}break;
+				} break;
 			case '2' :
 				{
 					printf("\n");
@@ -68,6 +70,14 @@ int main(int argc, char * argv[])
 			case '3' : 
 				{
 					ListFileVariable(argv[2], GetConfig());
+				} break;
+			case '6' :
+				{
+					PrimaryKeyFile(argv[2], GetConfig());
+				} break;
+			case '7' :
+				{
+					IndexFile(argv[2], GetConfig());
 				} break;
 			case '8' : 
 				{
