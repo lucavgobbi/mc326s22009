@@ -33,29 +33,26 @@ Boolean VerifyRegister()
 	return true;/*Temporario*/
 }
 
-/*Funcao auxiliar que imprime apenas um registro. Recebe como parametros o stream do arquivo
-e a posicao inicial do registro e retorna o tamanho do registro. Retorna 0 se o registro
-estiver vazio ou se input = NULL.*/
-int PrintRegister(FILE *input,int initialPosition)
+/*Funcao auxiliar que imprime uma linha com o formato variavel*/
+void PrintFileVar(FILE *input, InputConfiguration *inputConfiguration)
 {
-
 	char caracter;
-	int byteCounter;
+	int byteCounter,initialPosition;
 
 	byteCounter = 0;
+	initialPosition = 0;
 
-	/*Verfica primeiro caracter para ver se nao e eof*/
 	caracter = (char)getc(input);
-
-	if((feof(input)==0)&&(input!=NULL)){
+	printf("\n");
+	while(feof(input)==0)
+	{
+		printf("%c", caracter);
 		while((caracter!='\n')&&(feof(input)==0))
 		{
-			printf("%c", caracter);
 			caracter = (char)getc(input);
+			printf("%c", caracter);
 			byteCounter++;
 		}
-		printf("\n");
-
 		printf(Translate("RegisterInit"), initialPosition);
 		printf(Translate("RegisterSize"), byteCounter);
 		if(VerifyRegister())
@@ -66,24 +63,11 @@ int PrintRegister(FILE *input,int initialPosition)
 		{
 			printf(Translate("RemovedRegister"));
 		}
+		initialPosition = initialPosition + byteCounter + 1;
+		byteCounter = 0;
+		caracter = (char)getc(input);
 	}
 
-	 	return byteCounter;
-}
-
-/*Funcao auxiliar que imprime uma linha com o formato variavel*/
-void PrintFileVar(FILE *input)
-{
-	int initialPosition;
-
-	initialPosition = 0;
-
-	printf("\n");
-	while(feof(input)==0)
-	{
-		initialPosition = initialPosition + PrintRegister(input,initialPosition) + 1;
-	}
-	printf("\n");
 }
 
 void PrintFileSize(char *filePath, char *text)
@@ -161,6 +145,8 @@ void ListFileVariable(char *inputFile, InputConfiguration *inputConfiguration)
 {
 	char *outputFile;
 	FILE *output;
+	InputConfiguration *aux;
+	aux = inputConfiguration;
 	outputFile = "out.temp";
 
 	ConvertFile(inputFile,outputFile,inputConfiguration);
@@ -171,7 +157,7 @@ void ListFileVariable(char *inputFile, InputConfiguration *inputConfiguration)
 		return;
 	}
 
-	PrintFileVar(output);
+	PrintFileVar(output,inputConfiguration);
 
 	fclose(output);
 }
@@ -234,11 +220,25 @@ void ListFileFixed(char *inputFile, InputConfiguration *inputConfiguration)
         return;
 }
 
+int CopyLine(FILE *file, char*str)
+{
+	int aux;
+	char carac;
+	aux = 0;
+	carac = (char)getc(file);
+	while(carac != '\n' && !feof(file))
+	{
+		str[aux] = carac;
+		carac = (char)getc(file);
+		aux++;
+	}
+	str[aux+1] = '\n';
+	return aux;
+}
+
 void PrintIndex(char * filePath)
 {
 	InputConfiguration *tmpCfg;
 	tmpCfg = LoadInputConfigurationAux("index.dat");
 	ListFileFixed(filePath, tmpCfg);
-	
-	
 }
