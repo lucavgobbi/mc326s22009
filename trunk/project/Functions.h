@@ -22,3 +22,4 @@ void ListFileVariable(char *inputFile, InputConfiguration *inputConfiguration);
 
 void PrintIndex(char * filePath);
 
+int CopyLine(FILE *file, char*str);
