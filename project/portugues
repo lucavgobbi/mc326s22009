@@ -2,6 +2,8 @@ Menu1#1. Converter para formato variavel
 Menu2#2. Listar no formato fixo
 Menu3#3. Listar no formato variavel
 Menu4#4. Sair
+Menu6#6. Criar arquivo de chaves primarias
+Menu7#7. Criar arquivo ordenado de chaves primarias
 MenuHeader# Projeto 2:
 MenuError#Opcao Invalida
 AskOutPath#Digite o caminho do arquivo de saida
