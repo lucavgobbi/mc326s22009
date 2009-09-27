@@ -15,9 +15,12 @@ char Menu()
 	printf(Translate("Menu4"));
 	printf(Translate("Menu6"));
 	printf(Translate("Menu7"));
+	printf(Translate("Menu8"));
+	printf(Translate("Menu9"));
+	printf(Translate("MenuExit"));
 	scanf(" %c", &menuOption);
 	/*Fica lendo at� que uma op��o valida seja digitada*/
-	while(menuOption < 48 || menuOption > 56)
+	while(menuOption < 48 || menuOption > 57)
 	{
 		printf(Translate("MenuError"));
 		scanf(" %c", &menuOption);	
