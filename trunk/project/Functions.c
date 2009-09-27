@@ -322,7 +322,7 @@ void ListFileFixed(char *inputFile, InputConfiguration *inputConfiguration)
 
 /*==========================================================* Opcao 6 *========================================================*/
 
-/*Funcao que cria um arquivo contendo as chaves primarias e com o endereço fisico de cada registro
+/*Funcao que cria um arquivo contendo as chaves primarias e com o endereï¿½o fisico de cada registro
 separados pelo separador dinamico encontrado no arquivo de configuracoes*/
 void PrimaryKeyFile(char *inputFile, InputConfiguration *inputConfiguration)
 {
@@ -348,7 +348,7 @@ void PrimaryKeyFile(char *inputFile, InputConfiguration *inputConfiguration)
 		registerSize = CopyLine(input,aux);
 		/*Retorna o primeiro campo em key*/
 		key = StringBreak(aux,fieldSize);
-		/*Retorna o endereço em adress*/
+		/*Retorna o endereï¿½o em adress*/
 		Adress (adress,registerSize,loopCounter);
 		/*Monta o formato do indice em key*/
 		IndexRegister(key,adress);
@@ -385,7 +385,8 @@ void IndexFile (char *inputFile, InputConfiguration *inputConfiguration)
 
 void PrintIndex(char * filePath)
 {
-	InputConfiguration *tmpCfg;
-	tmpCfg = LoadInputConfigurationAux("index.dat");
-	ListFileFixed(filePath, tmpCfg);
+	FILE *file;
+	file = fopen(filePath, "r");
+	PrintFileVar(file);
+	fclose(file);
 }
