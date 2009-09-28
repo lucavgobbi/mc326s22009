@@ -36,30 +36,25 @@ Boolean VerifyRegister()
 }
 
 /*Funcao auxiliar que imprime apenas um registro. Recebe como parametros o stream do arquivo
-e a posicao inicial do registro e retorna o tamanho do registro. Retorna 0 se o registro
+e a posicao inicial do registro e retorna o tamanho do registro. Retorna -1 se o registro
 estiver vazio ou se input = NULL.*/
 int PrintRegister(FILE *input,int initialPosition)
 {
 
-	char caracter;
-	int byteCounter;
+	char *registro;
+	int byteSize=-1;
 
-	byteCounter = 0;
-
-	/*Verfica primeiro caracter para ver se nao e eof*/
-	caracter = (char)getc(input);
+	registro = (char *)malloc(sizeof(char)*600);
 
 	if((feof(input)==0)&&(input!=NULL)){
-		while((caracter!='\n')&&(feof(input)==0))
-		{
-			printf("%c", caracter);
-			caracter = (char)getc(input);
-			byteCounter++;
+		byteSize = CopyLine(input,registro);
+		if(byteSize==0){
+			return -1;
 		}
 		printf("\n");
-
+		fputs(registro,stdout);
 		printf(Translate(RegisterInit), initialPosition);
-		printf(Translate(RegisterSize), byteCounter);
+		printf(Translate(RegisterSize), byteSize);
 		if(VerifyRegister())
 		{
 			printf(Translate(ValidRegister));
@@ -70,7 +65,9 @@ int PrintRegister(FILE *input,int initialPosition)
 		}
 	}
 
-	 return byteCounter;
+	free(registro);
+
+	return byteSize;
 }
 
 /*Funcao auxiliar que imprime uma linha com o formato variavel*/
@@ -152,7 +149,8 @@ int CopyLine(FILE *file, char*str)
 		carac = (char)getc(file);
 		aux++;
 	}
-	str[aux+1] = '\n';
+	str[aux] = '\n';
+	str[aux+1] = '\0';
 	return aux;
 }
 
@@ -208,7 +206,7 @@ void WriteString(FILE *file, char *str)
 
 /*==========================================================* Opcao 1 *========================================================*/
 
-/*Funcao que deve ler o arquivo de entrada baseado nas configura��es definidas na lista inputConfiguration
+/*Funcao que deve ler o arquivo de entrada baseado nas configuracoes definidas na lista inputConfiguration
 e escrever o arquivo de saida em outputfile, lembrando sempre de utilizar o separador dinamico que pode ser obtido com, (char)separator()[0]*/
 void ConvertFile(char *inputFile, char *outputFile, InputConfiguration *inputConfiguration)
 {
@@ -244,14 +242,14 @@ void ConvertFile(char *inputFile, char *outputFile, InputConfiguration *inputCon
 		/*Transforma o campo fixo em variavel*/
 		FixedToVariable(strfix, strvar);
 		/*Escreve o campo variavel no arquivo de saida*/
-		fwrite(strvar,strlen(strvar),1,output);
+		WriteString(output,strvar);
 		/*Pula para o proximo campo e insere o separador*/
 		if(aux->next!=NULL)
 		{
 			aux = aux->next;
 			fwrite(separator(),1,1,output);
 		}
-		/*Se for o campo fim de registro, escreve quebra de linha e volta do come�o*/
+		/*Se for o campo fim de registro, escreve quebra de linha e volta do comeco*/
 		else
 		{
 			fwrite("\n",1,1,output);
@@ -272,32 +270,7 @@ void ConvertFile(char *inputFile, char *outputFile, InputConfiguration *inputCon
 
 /*==========================================================* Opcao 2 *========================================================*/
 
-/*Funcao que lista o arquivo de forma variavel
-Para reutilizacao das funcoes ja existentes a funcao cria um arquivo temporario de saida
-*/
-void ListFileVariable(char *inputFile, InputConfiguration *inputConfiguration)
-{
-	char *outputFile;
-	FILE *output;
-	outputFile = "out.temp";
-
-	ConvertFile(inputFile,outputFile,inputConfiguration);
-	output = fopen(outputFile,"r");
-
-	if(output==NULL)
-	{
-		return;
-	}
-
-	PrintFileVar(output);
-
-	fclose(output);
-}
-
-
-/*==========================================================* Opcao 3 *========================================================*/
-
-/*Fun��o que lista o arquivo de forma fixa, implementar*/
+/*Funcao que lista o arquivo de forma fixa, implementar*/
 void ListFileFixed(char *inputFile, InputConfiguration *inputConfiguration)
 {
         FILE *input;
@@ -346,6 +319,31 @@ void ListFileFixed(char *inputFile, InputConfiguration *inputConfiguration)
 }
 
 
+/*==========================================================* Opcao 3 *========================================================*/
+
+/*Funcao que lista o arquivo de forma variavel
+Para reutilizacao das funcoes ja existentes a funcao cria um arquivo temporario de saida
+*/
+void ListFileVariable(char *inputFile, InputConfiguration *inputConfiguration)
+{
+	char *outputFile;
+	FILE *output;
+	outputFile = "out.temp";
+
+	ConvertFile(inputFile,outputFile,inputConfiguration);
+	output = fopen(outputFile,"r");
+
+	if(output==NULL)
+	{
+		return;
+	}
+
+	PrintFileVar(output);
+
+	fclose(output);
+}
+
+
 /*==========================================================* Opcao 4 *========================================================*/
 
 
@@ -384,7 +382,7 @@ void FindReg(char *input,InputConfiguration *inputConf, char *compare){
 separados pelo separador dinamico encontrado no arquivo de configuracoes*/
 void PrimaryKeyFile(char *inputFile, InputConfiguration *inputConfiguration)
 {
-	char *key, *adress, *aux;
+	char *keyfix, *keyvar, *adress, *aux;
 	int registerSize, fieldSize, loopCounter=0;
 	FILE *input, *output;
 
@@ -400,23 +398,27 @@ void PrimaryKeyFile(char *inputFile, InputConfiguration *inputConfiguration)
 
 	aux = (char *)malloc(sizeof(char)*600);
 	adress = (char *)malloc(sizeof(char)*10);
+	keyvar = (char *)malloc(sizeof(char)*600);
 
 	while(feof(input)==0){
 		/*Copia o registro para aux*/
 		registerSize = CopyLine(input,aux);
 		/*Retorna o primeiro campo em key*/
-		key = StringBreak(aux,fieldSize);
-		/*Retorna o endere�o em adress*/
+		keyfix = StringBreak(aux,fieldSize);
+		/*Transforma a chave key fix em variavel*/
+		FixedToVariable(keyfix,keyvar);
+		/*Retorna o endereco em adress*/
 		Adress (adress,registerSize,loopCounter);
 		/*Monta o formato do indice em key*/
-		IndexRegister(key,adress);
+		IndexRegister(keyvar,adress);
 		/*Escreve key no arquivo*/
-		WriteString(output,key);
+		WriteString(output,keyvar);
 		/*Conta o numero de loops*/
 		loopCounter++;
-		free(key);
+		free(keyfix);
 	}
 
+	free(keyvar);
 	free(aux);
 	free(adress);
 	fclose(input);
