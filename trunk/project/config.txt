@@ -1,5 +1,5 @@
 RA|N|1|6|S|RA Obrigatorio|
-Nome|X|8|32|S|Nome Obrigatorio|
+Nome|X|7|32|S|Nome Obrigatorio|
 Cidade|X|33|46|N|Cidade Nao Obrigatorio|
 Telefone|X|47|54|S|Telefone Obrigatorio|
 FimRegistro|X|55|55|S|#|

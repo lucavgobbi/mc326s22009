@@ -6,6 +6,7 @@ Menu6#6. Criar arquivo de chaves primarias
 Menu7#7. Criar arquivo ordenado de chaves primarias
 Menu8#8. Imprimir arquivo de chaves primarias
 Menu9#9. Imprimir arquivo ordenado de chaves primarias
+Menu4#4. Pesquisa de registro utilizando chave primaria
 MenuHeader# Projeto 2:
 MenuError#Opcao Invalida
 AskOutPath#Digite o caminho do arquivo de saida
@@ -15,3 +16,7 @@ ValidRegister#O registro e valido
 RemovedRegister#O registro foi removido
 OutputSize#Tamanho do arquivo de saida %d
 InputSize#Tamanho do arquivo de entrada %d
+RegisterBegin#Inicio do Registro
+EnterPK#Entre com o primary key
+RegisterNotFound#Registro nao encontrado
+

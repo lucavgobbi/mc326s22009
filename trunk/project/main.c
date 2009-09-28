@@ -8,21 +8,21 @@
 char Menu()
 {
 	char menuOption;
-	printf(Translate("MenuHeader"));
-	printf(Translate("Menu1"));
-	printf(Translate("Menu2"));
-	printf(Translate("Menu3"));
-	printf(Translate("Menu4"));
-	printf(Translate("Menu6"));
-	printf(Translate("Menu7"));
-	printf(Translate("Menu8"));
-	printf(Translate("Menu9"));
-	printf(Translate("MenuExit"));
+	printf(Translate(MenuHeader));
+	printf(Translate(Menu1));
+	printf(Translate(Menu2));
+	printf(Translate(Menu3));
+	printf(Translate(Menu4));
+	printf(Translate(Menu6));
+	printf(Translate(Menu7));
+	printf(Translate(Menu8));
+	printf(Translate(Menu9));
+	printf(Translate(MenuExit));
 	scanf(" %c", &menuOption);
 	/*Fica lendo at� que uma op��o valida seja digitada*/
 	while(menuOption < 48 || menuOption > 57)
 	{
-		printf(Translate("MenuError"));
+		printf(Translate(MenuError));
 		scanf(" %c", &menuOption);	
 	}
 	return menuOption;
@@ -33,6 +33,7 @@ int main(int argc, char * argv[])
 	/*Variaveis*/
 	char menuOption; /*Guarda o valor digitado*/
 	char  outputPath[100];
+	char compare[6];
 
 	/*Carrega as configura��es*/
 	if(!LoadConfig())
@@ -59,14 +60,14 @@ int main(int argc, char * argv[])
 		{
 			case '1' : 
 				{
-					printf(Translate("AskOutPath"));
+					printf(Translate(AskOutPath));
 					scanf("%s", outputPath);
 					ConvertFile(argv[2], outputPath, GetConfig());
 				} break;
 			case '2' :
 				{
 					printf("\n");
-				        printf("Inicio do Registro\n");
+				        printf(Translate(RegisterBegin));
 				        printf("\n");
 				        ListFileFixed(argv[2], GetConfig());
 				} break;
@@ -74,6 +75,14 @@ int main(int argc, char * argv[])
 				{
 					ListFileVariable(argv[2], GetConfig());
 				} break;
+			case '4' :
+				{
+					printf(Translate(EnterPK));
+				        printf("\n");
+					scanf("%s", compare);
+					FindReg(argv[2],GetConfig(),compare);
+				        printf("\n");
+				}
 			case '6' :
 				{
 					PrimaryKeyFile(argv[2], GetConfig());

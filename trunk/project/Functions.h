@@ -25,9 +25,11 @@ void PrintIndex(char * filePath);
 /*Funcao que copia a linha do arquivo file para dentro de str e retorna o numero de caracteres da linha.*/
 int CopyLine(FILE *file, char*str);
 
-/*Funcao que cria um arquivo contendo as chaves primarias e com o endereço fisico de cada registro
+/*Funcao que cria um arquivo contendo as chaves primarias e com o endereï¿½o fisico de cada registro
 separados pelo separador dinamico encontrado no arquivo de configuracoes*/
 void PrimaryKeyFile (char *inputFile, InputConfiguration *inputConfiguration);
 
 /*Funcao que cria um arquivo ordenado a partir das chaves primarias obtidas na opcao 6*/
 void IndexFile (char *inputFile, InputConfiguration *inputConfiguration);
+
+void FindReg(char *input,InputConfiguration *inputConf, char *compare);
