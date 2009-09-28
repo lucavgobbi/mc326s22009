@@ -58,15 +58,15 @@ int PrintRegister(FILE *input,int initialPosition)
 		}
 		printf("\n");
 
-		printf(Translate("RegisterInit"), initialPosition);
-		printf(Translate("RegisterSize"), byteCounter);
+		printf(Translate(RegisterInit), initialPosition);
+		printf(Translate(RegisterSize), byteCounter);
 		if(VerifyRegister())
 		{
-			printf(Translate("ValidRegister"));
+			printf(Translate(ValidRegister));
 		}
 		else
 		{
-			printf(Translate("RemovedRegister"));
+			printf(Translate(RemovedRegister));
 		}
 	}
 
@@ -93,6 +93,40 @@ void PrintFileSize(char *filePath, char *text)
 	struct stat st;
 	stat(filePath,&st);
 	printf(text,st.st_size);
+}
+
+void ArrayVar(char *stringfix, char *stringvar, InputConfiguration *inputConf){
+	int aux1,count=0,a,b=0;
+	InputConfiguration *aux;
+	aux = inputConf;
+
+	while(aux!= NULL){
+	       aux1=aux->finalPosition;
+	       while(stringfix[aux1-1] == ' '){
+	              aux1--;
+	              b++;
+	       }
+               for(a=0; a<aux->finalPosition-aux->initialPosition+1-b; a++){
+                       stringvar[count+a]=stringfix[aux->initialPosition+a-1];
+               }
+               count=count+a;
+               stringvar[count]=(char)separator()[0];
+               count++;
+               b=0;
+               aux=aux->next;
+        }
+        return;
+}
+
+void BloqPrim(char *str){
+	int aux=0;
+	while(1){
+	if((str[aux]=='#') && (str[aux+1]==(char)separator()[0])){
+	printf("#%c",(char)separator()[0]);
+	return;}
+	printf("%c",str[aux]);
+	aux++;}
+	return;
 }
 
 /*Funcao que imprime a lista fixa*/
@@ -231,8 +265,8 @@ void ConvertFile(char *inputFile, char *outputFile, InputConfiguration *inputCon
 	free(strfix);
 	fclose(input);
 	fclose(output);
-	PrintFileSize(inputFile,Translate("InputSize"));
-	PrintFileSize(outputFile,Translate("OutputSize"));
+	PrintFileSize(inputFile,Translate(InputSize));
+	PrintFileSize(outputFile,Translate(OutputSize));
 }
 
 
@@ -315,6 +349,30 @@ void ListFileFixed(char *inputFile, InputConfiguration *inputConfiguration)
 /*==========================================================* Opcao 4 *========================================================*/
 
 
+void FindReg(char *input,InputConfiguration *inputConf, char *compare){
+      	FILE *file;
+	char *stringfix,*stringvar;
+
+	file=fopen(input,"r");
+  	
+	while((file!= NULL) && feof(file)==0){
+		stringfix = (char *)malloc(sizeof(char)*300);	
+		stringvar = (char *)malloc(sizeof(char)*300);	
+		CopyLine(file,stringfix);
+		ArrayVar(stringfix,stringvar,inputConf);
+		if((strncmp(stringvar,compare,strlen(compare))==0) && (stringvar[strlen(compare)]==(char)separator()[0])){
+			BloqPrim(stringvar);
+			fclose(file);
+			return;
+		}
+		free(stringfix);
+		free(stringvar);
+	}
+	printf(Translate(RegisterNotFound));
+	fclose(file);
+	return;
+}
+		
 
 /*==========================================================* Opcao 5 *========================================================*/
 
