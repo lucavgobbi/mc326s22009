@@ -85,11 +85,18 @@ void PrintFileVar(FILE *input)
 	printf("\n");
 }
 
+int FileSize(char *filePath)
+{
+	struct stat st;
+	stat(filePath,&st);
+	return st.st_size;
+}
+
 void PrintFileSize(char *filePath, char *text)
 {
 	struct stat st;
 	stat(filePath,&st);
-	printf(text,st.st_size);
+	printf(text,FileSize(filePath));
 }
 
 void ArrayVar(char *stringfix, char *stringvar, InputConfiguration *inputConf){
@@ -193,8 +200,79 @@ void WriteString(FILE *file, char *str)
 	fwrite(str,strlen(str),1,file);
 }
 
+/*Funcao que recebe um arquivo de indice, e um valor a ser buscado, e retorna o int correspondente ao valor encontrado*/
+int BinarySearch(char *filePath, char *value, InputConfiguration * inptCfg)
+{
+	FILE *file;
+	int position, initial, final, comp, kSize;
+	char c;
+	char temp[50];
+	char *key;
+	if(!Error_FileOpen(filePath))
+	{
+		key = (char *)malloc(sizeof(char)*inptCfg->finalPosition);
+		initial = 0;
+		final = FileSize(filePath) - 1;
+		file = fopen(filePath, "r");
+		while(initial < final)
+		{
+			position =	(final + initial)/2;
+			printf("%d, %d, %d \n",initial, final, position);
+			fseek(file, position, SEEK_SET);
+			c = getc(file);
+			printf("C:%c \n", c);
+			/*Verifica se esta no final de uma linha para pegar um registro valido*/
+			
+				while(c!= '\n' && position != 0)
+				{
+					position = position - 1;
+					fseek(file, position, SEEK_SET);
+					c = getc(file);	
+					printf("C:%c \n", c);
+				}
+			if (position != 0)
+			{
+				c = getc(file);
+			}
+			/*nesse ponto vai estar apontando para um indice ou para o fim do arquivo*/
+			if(!feof(file))
+			{
+				/*agora vai ler  chave*/
+				kSize = 0;
+				while (c != (char)separator()[0])
+				{
+					key[kSize] = c;
+					c= getc(file);
+					kSize++;
+				}
+				key[kSize] = '\0';
+				/*Se achou*/
+				printf("...%s...",key);
+				comp = strcmp(key,value);
+				if(comp==0) 
+				{
+					fgets(temp,50,file);
+					return atoi(temp);
+				}
+				else if(comp > 0) /*key e maior*/
+				{
+					final = position;
+				}
+				else
+				{
+					initial = position;
+				}
+			}
+			else /*Caso em que procurando um indice chega no final do arquivo*/
+			{
+				return -1;
+			}
+		}
+	}
 
-
+	return -1;
+	
+}
 
 
 /*=======================================================FUNCOES PRINCIPAIS====================================================*/
@@ -445,8 +523,23 @@ void IndexFile (char *inputFile, InputConfiguration *inputConfiguration)
 
 void PrintIndex(char * filePath)
 {
-	FILE *file;
-	file = fopen(filePath, "r");
-	PrintFileVar(file);
-	fclose(file);
+	if(!Error_FileOpen(filePath))
+	{
+		FILE *file;
+		file = fopen(filePath, "r");
+		PrintFileVar(file);
+		fclose(file);
+	}
+	else
+	{
+		return;
+	}
 }
+
+/*==========================================================* Opcao 10 *========================================================*/
+void BuildIndex(InputConfiguration *inputConfiguration)
+{
+	IndexFile("_index", inputConfiguration);
+}
+
+/*==========================================================* Opcao 11 *========================================================*/
