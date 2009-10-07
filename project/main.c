@@ -97,7 +97,10 @@ int main(int argc, char * argv[])
 				} break;
 			case '9' : 
 				{
-					PrintIndex("indexsort");;
+					printf(Translate(EnterPK));
+				    printf("\n");
+					scanf("%s", compare);
+					printf("Resultado: %d",BinarySearch("indexsort", compare, GetConfig()));
 				} break;
 		}
 		menuOption = Menu();

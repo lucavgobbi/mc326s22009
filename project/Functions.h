@@ -33,3 +33,5 @@ void PrimaryKeyFile (char *inputFile, InputConfiguration *inputConfiguration);
 void IndexFile (char *inputFile, InputConfiguration *inputConfiguration);
 
 void FindReg(char *input,InputConfiguration *inputConf, char *compare);
+
+int BinarySearch(char *filePath, char *value, InputConfiguration * inptCfg);
