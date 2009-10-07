@@ -1,12 +1,12 @@
-Menu1#1. Converter para formato variavel
-Menu2#2. Listar no formato fixo
-Menu3#3. Listar no formato variavel
-MenuExit#0. Sair
-Menu6#6. Criar arquivo de chaves primarias
-Menu7#7. Criar arquivo ordenado de chaves primarias
-Menu8#8. Imprimir arquivo de chaves primarias
-Menu9#9. Imprimir arquivo ordenado de chaves primarias
-Menu4#4. Pesquisa de registro utilizando chave primaria
+Menu1#a. Converter para formato variavel
+Menu2#b. Listar no formato fixo
+Menu3#c. Listar no formato variavel
+MenuExit#k. Sair
+Menu6#e. Criar arquivo de chaves primarias
+Menu7#f. Criar arquivo ordenado de chaves primarias
+Menu8#g. Imprimir arquivo de chaves primarias
+Menu9#h. Imprimir arquivo ordenado de chaves primarias
+Menu4#d. Pesquisa de registro utilizando chave primaria
 MenuHeader# Projeto 2:
 MenuError#Opcao Invalida
 AskOutPath#Digite o caminho do arquivo de saida

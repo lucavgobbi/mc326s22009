@@ -20,7 +20,7 @@ char Menu()
 	printf(Translate(MenuExit));
 	scanf(" %c", &menuOption);
 	/*Fica lendo at� que uma op��o valida seja digitada*/
-	while(menuOption < 48 || menuOption > 57)
+	while(menuOption < 96 || menuOption > 108)
 	{
 		printf(Translate(MenuError));
 		scanf(" %c", &menuOption);	
@@ -54,28 +54,28 @@ int main(int argc, char * argv[])
 
 	/*Mantem o menu em loop at� que a op��o de saida seja digitada*/
 	menuOption = Menu();
-	while(menuOption != '0')
+	while(menuOption != 'k')
 	{
 		switch (menuOption)
 		{
-			case '1' : 
+			case 'a' : 
 				{
 					printf(Translate(AskOutPath));
 					scanf("%s", outputPath);
 					ConvertFile(argv[2], outputPath, GetConfig());
 				} break;
-			case '2' :
+			case 'b' :
 				{
 					printf("\n");
 				        printf(Translate(RegisterBegin));
 				        printf("\n");
 				        ListFileFixed(argv[2], GetConfig());
 				} break;
-			case '3' : 
+			case 'c' : 
 				{
 					ListFileVariable(argv[2], GetConfig());
 				} break;
-			case '4' :
+			case 'd' :
 				{
 					printf(Translate(EnterPK));
 				        printf("\n");
@@ -83,25 +83,30 @@ int main(int argc, char * argv[])
 					FindReg(argv[2],GetConfig(),compare);
 				        printf("\n");
 				}
-			case '6' :
+			case 'e' :
 				{
 					PrimaryKeyFile(argv[2], GetConfig());
 				} break;
-			case '7' :
+			case 'f' :
 				{
 					IndexFile(argv[2], GetConfig());
 				} break;
-			case '8' : 
+			case 'g' : 
 				{
 					PrintIndex("index");
 				} break;
-			case '9' : 
+			case 'h' : 
+				{
+					PrintIndex("indexsort");
+					
+				} break;
+			case 'i' :
 				{
 					printf(Translate(EnterPK));
 				    printf("\n");
 					scanf("%s", compare);
 					printf("Resultado: %d",BinarySearch("indexsort", compare, GetConfig()));
-				} break;
+				}
 		}
 		menuOption = Menu();
 	}
