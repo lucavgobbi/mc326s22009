@@ -20,6 +20,7 @@ void ListFileFixed(char *inputFile, InputConfiguration *inputConfiguration);
 /*Fun��o que lista o arquivo de forma variavel*/
 void ListFileVariable(char *inputFile, InputConfiguration *inputConfiguration);
 
+/*Imprime o arquivo*/
 void PrintIndex(char * filePath);
 
 /*Funcao que copia a linha do arquivo file para dentro de str e retorna o numero de caracteres da linha.*/
@@ -32,6 +33,8 @@ void PrimaryKeyFile (char *inputFile, InputConfiguration *inputConfiguration);
 /*Funcao que cria um arquivo ordenado a partir das chaves primarias obtidas na opcao 6*/
 void IndexFile (char *inputFile, InputConfiguration *inputConfiguration);
 
+/*Localiza um registro e imprime na tela*/
 void FindReg(char *input,InputConfiguration *inputConf, char *compare);
 
-int BinarySearch(char *filePath, char *value, InputConfiguration * inptCfg);
+/*Localiza um registro usando busca binaria em disco e imprime na tela*/
+void SearchInDisk(char * value, char * dataFilePath, InputConfiguration *inputConfiguration);

@@ -14,6 +14,7 @@
 #define Menu7 "Menu7"
 #define Menu8 "Menu8"
 #define Menu9 "Menu9"
+#define Menu10 "Menu10"
 #define MenuExit "MenuExit"
 #define MenuError "MenuError"
 #define AskOutPath "AskOutPath"
