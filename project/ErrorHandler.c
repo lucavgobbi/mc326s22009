@@ -27,6 +27,6 @@ int Error_FileOpen(char * filePath)
 		fclose(file);
 		return 0;
 	}
-	printf("Error while opening file %s", filePath);
+	printf("Error while opening file %s\n", filePath);
 	return 1;
 }

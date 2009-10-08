@@ -17,6 +17,7 @@ char Menu()
 	printf(Translate(Menu7));
 	printf(Translate(Menu8));
 	printf(Translate(Menu9));
+	printf(Translate(Menu10));
 	printf(Translate(MenuExit));
 	scanf(" %c", &menuOption);
 	/*Fica lendo at� que uma op��o valida seja digitada*/
@@ -105,7 +106,7 @@ int main(int argc, char * argv[])
 					printf(Translate(EnterPK));
 				    printf("\n");
 					scanf("%s", compare);
-					printf("Resultado: %d",BinarySearch("indexsort", compare, GetConfig()));
+					SearchInDisk(compare, argv[2], GetConfig());
 				}
 		}
 		menuOption = Menu();

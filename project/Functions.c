@@ -85,6 +85,7 @@ void PrintFileVar(FILE *input)
 	printf("\n");
 }
 
+/*Retorna o tamnho do arquivo*/
 int FileSize(char *filePath)
 {
 	struct stat st;
@@ -92,6 +93,7 @@ int FileSize(char *filePath)
 	return st.st_size;
 }
 
+/*Imprime o tamnho do arquivo*/
 void PrintFileSize(char *filePath, char *text)
 {
 	struct stat st;
@@ -179,7 +181,7 @@ void Adress(char* adress, int regSize, int regNum)
 {
 	int position;
 
-	position = regSize*regNum+1;
+	position = (regSize+1)*regNum + 1;
 
 	sprintf(adress, "%d", position);
 
@@ -204,7 +206,7 @@ void WriteString(FILE *file, char *str)
 int BinarySearch(char *filePath, char *value, InputConfiguration * inptCfg)
 {
 	FILE *file;
-	int position, initial, final, comp, kSize;
+	int position, initial, final, comp, kSize, v1, v2;
 	char c;
 	char temp[50];
 	char *key;
@@ -217,10 +219,8 @@ int BinarySearch(char *filePath, char *value, InputConfiguration * inptCfg)
 		while(initial < final)
 		{
 			position =	(final + initial)/2;
-			printf("%d, %d, %d \n",initial, final, position);
 			fseek(file, position, SEEK_SET);
 			c = getc(file);
-			printf("C:%c \n", c);
 			/*Verifica se esta no final de uma linha para pegar um registro valido*/
 			
 				while(c!= '\n' && position != 0)
@@ -228,7 +228,6 @@ int BinarySearch(char *filePath, char *value, InputConfiguration * inptCfg)
 					position = position - 1;
 					fseek(file, position, SEEK_SET);
 					c = getc(file);	
-					printf("C:%c \n", c);
 				}
 			if (position != 0)
 			{
@@ -247,29 +246,42 @@ int BinarySearch(char *filePath, char *value, InputConfiguration * inptCfg)
 				}
 				key[kSize] = '\0';
 				/*Se achou*/
-				printf("...%s...",key);
+				v1 = atol(key);
+				v2 = atol(value);
 				comp = strcmp(key,value);
-				if(comp==0) 
+				if(v1 == v2) 
 				{
 					fgets(temp,50,file);
+					fclose(file);
 					return atoi(temp);
 				}
-				else if(comp > 0) /*key e maior*/
+				else if(v1 > v2) /*key e maior*/
 				{
+					if(final == position)
+					{
+						fclose(file);
+						return -1;
+					}
 					final = position;
 				}
 				else
 				{
+					if(initial == position)
+					{
+						fclose(file);
+						return -1;
+					}
 					initial = position;
 				}
 			}
 			else /*Caso em que procurando um indice chega no final do arquivo*/
 			{
+				fclose(file);
 				return -1;
 			}
 		}
 	}
-
+	fclose(file);
 	return -1;
 	
 }
@@ -543,3 +555,29 @@ void BuildIndex(InputConfiguration *inputConfiguration)
 }
 
 /*==========================================================* Opcao 11 *========================================================*/
+
+	void SearchInDisk(char * value, char * dataFilePath, InputConfiguration *inputConfiguration)
+{
+	int position;
+	FILE *file;
+	
+	if(!Error_FileOpen("indexsort"))
+	{
+		position = BinarySearch("indexsort", value, inputConfiguration);
+	}
+	else
+	{
+		return;
+	}
+	if(position == -1)
+	{
+		printf(Translate(RegisterNotFound));
+	}
+	else
+	{
+		file = fopen(dataFilePath, "r");
+		fseek(file, position -1, SEEK_SET);
+		PrintRegister(file,position);
+		fclose(file);
+	}
+}

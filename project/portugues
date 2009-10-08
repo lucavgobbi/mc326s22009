@@ -7,6 +7,7 @@ Menu7#f. Criar arquivo ordenado de chaves primarias
 Menu8#g. Imprimir arquivo de chaves primarias
 Menu9#h. Imprimir arquivo ordenado de chaves primarias
 Menu4#d. Pesquisa de registro utilizando chave primaria
+Menu10#i. Busca binaria em disco
 MenuHeader# Projeto 2:
 MenuError#Opcao Invalida
 AskOutPath#Digite o caminho do arquivo de saida
