@@ -12,11 +12,13 @@ int LoadConfig()
 	confTemp = (cfg*)malloc(sizeof(cfg));
 	confTemp->translateFile = (char *)malloc(sizeof(char)*30);
 	confTemp->separator = (char *)malloc(sizeof(char)*1);
+	confTemp->inputConf = (char *)malloc(sizeof(char)*30);
 	file = fopen("cfg", "r");
 	if (file != NULL)
 	{
 		fscanf(file, "%s", confTemp->translateFile);
 		fscanf(file, "%s", confTemp->separator);
+		fscanf(file, "%s", confTemp->inputConf);
 	}
 	else
 	{
@@ -43,4 +45,9 @@ char *translateFile()
 char *separator()
 {
 	return config->separator;
+}
+
+char *inputConf()
+{
+	return config->inputConf;
 }

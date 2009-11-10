@@ -9,7 +9,7 @@ O padr�o de nome � Error_Descri��o da verifica��o*/
 
 int Error_InputParameters(int argc, char * argv[])
 {
-	if(argc != 3)
+	if(argc != 4)
 	{
 		printf("Incorrect parameters number");
 		return 1;
@@ -30,3 +30,4 @@ int Error_FileOpen(char * filePath)
 	printf("Error while opening file %s\n", filePath);
 	return 1;
 }
+
