@@ -203,13 +203,18 @@ void WriteString(FILE *file, char *str)
 }
 
 /*Funcao que recebe um arquivo de indice, e um valor a ser buscado, e retorna o int correspondente ao valor encontrado*/
-int BinarySearch(char *filePath, char *value, InputConfiguration * inptCfg)
+CharPosition BinarySearch(char *filePath, char *value, InputConfiguration * inptCfg)
 {
 	FILE *file;
-	int position, initial, final, comp, kSize, v1, v2;
+	CharPosition Return;
+	int position, initial, final, kSize, v1, v2, kPosition;
 	char c;
 	char temp[50];
 	char *key;
+	
+	Return.index = -1;
+	Return.data = -1;
+
 	if(!Error_FileOpen(filePath))
 	{
 		key = (char *)malloc(sizeof(char)*inptCfg->finalPosition);
@@ -238,6 +243,7 @@ int BinarySearch(char *filePath, char *value, InputConfiguration * inptCfg)
 			{
 				/*agora vai ler  chave*/
 				kSize = 0;
+				kPosition = position;
 				while (c != (char)separator()[0])
 				{
 					key[kSize] = c;
@@ -248,19 +254,20 @@ int BinarySearch(char *filePath, char *value, InputConfiguration * inptCfg)
 				/*Se achou*/
 				v1 = atol(key);
 				v2 = atol(value);
-				comp = strcmp(key,value);
 				if(v1 == v2) 
 				{
 					fgets(temp,50,file);
 					fclose(file);
-					return atoi(temp);
+					Return.index = atoi(temp);
+					Return.data = kPosition;
+					return Return/*atoi(temp)*/;
 				}
 				else if(v1 > v2) /*key e maior*/
 				{
 					if(final == position)
 					{
 						fclose(file);
-						return -1;
+						return Return;
 					}
 					final = position;
 				}
@@ -269,7 +276,7 @@ int BinarySearch(char *filePath, char *value, InputConfiguration * inptCfg)
 					if(initial == position)
 					{
 						fclose(file);
-						return -1;
+						return Return;
 					}
 					initial = position;
 				}
@@ -277,12 +284,12 @@ int BinarySearch(char *filePath, char *value, InputConfiguration * inptCfg)
 			else /*Caso em que procurando um indice chega no final do arquivo*/
 			{
 				fclose(file);
-				return -1;
+				return Return;
 			}
 		}
 	}
 	fclose(file);
-	return -1;
+	return Return;
 	
 }
 
@@ -559,11 +566,14 @@ void BuildIndex(InputConfiguration *inputConfiguration)
 	void SearchInDisk(char * value, char * dataFilePath, InputConfiguration *inputConfiguration)
 {
 	int position;
+	CharPosition t;
 	FILE *file;
 	
 	if(!Error_FileOpen("indexsort"))
 	{
-		position = BinarySearch("indexsort", value, inputConfiguration);
+		t = (BinarySearch("indexsort", value, inputConfiguration));
+		position = t.index;
+		printf(" - %d - ",t.data);
 	}
 	else
 	{

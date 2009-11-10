@@ -1,14 +1,7 @@
-Menu1#a. Converter para formato variavel
-Menu2#b. Listar no formato fixo
-Menu3#c. Listar no formato variavel
-MenuExit#k. Sair
-Menu6#e. Criar arquivo de chaves primarias
-Menu7#f. Criar arquivo ordenado de chaves primarias
-Menu8#g. Imprimir arquivo de chaves primarias
-Menu9#h. Imprimir arquivo ordenado de chaves primarias
-Menu4#d. Pesquisa de registro utilizando chave primaria
-Menu10#i. Busca binaria em disco
-MenuHeader# Projeto 2:
+Menu1#1 - Classificar por %s
+Menu2#2 - Classificar por %s
+MenuExit#3 - Sair
+MenuHeader# Projeto 3:
 MenuError#Opcao Invalida
 AskOutPath#Digite o caminho do arquivo de saida
 RegisterSize#O registro tem tamanho %d bytes

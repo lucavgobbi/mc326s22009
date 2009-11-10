@@ -23,3 +23,8 @@
 #define RegisterNotFound "RegisterNotFound"
 
 typedef enum {false=0, true=1} Boolean;
+
+typedef struct CharPosition{
+	int data;
+	int index;
+}CharPosition;
