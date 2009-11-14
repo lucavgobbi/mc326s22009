@@ -5,6 +5,7 @@
 #include "ConfigFileReader.h"
 
 InputConfiguration *cfg = NULL;
+int _registerSize = 0;
 
 void TestCfg()
 {
@@ -115,7 +116,7 @@ InputConfiguration *CreateInputConfiguration(int totalSize, char string[500])
 	strncpy(msg,string,strlen(string)-2);
 	
 	new->msg = msg;
-
+	_registerSize = new->finalPosition;
 	return new;
 }
 
@@ -206,3 +207,9 @@ InputConfiguration *LoadInputConfigurationAux(char *filePath)
 	fclose(file);
 	return list;
 }
+
+int GetRegisterSize()
+{
+	return _registerSize;
+}
+

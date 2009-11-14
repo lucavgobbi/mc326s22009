@@ -538,7 +538,7 @@ void IndexFile (char *inputFile, InputConfiguration *inputConfiguration)
 
 
 /*==========================================================* Opcao 8 *========================================================*/
-/*==========================================================* Opcao 9 *========================================================*/
+/*============================================n==============* Opcao 9 *========================================================*/
 
 void PrintIndex(char * filePath)
 {
@@ -563,7 +563,7 @@ void BuildIndex(InputConfiguration *inputConfiguration)
 
 /*==========================================================* Opcao 11 *========================================================*/
 
-	void SearchInDisk(char * value, char * dataFilePath, InputConfiguration *inputConfiguration)
+void SearchInDisk(char * value, char * dataFilePath, InputConfiguration *inputConfiguration)
 {
 	int position;
 	CharPosition t;
@@ -591,3 +591,306 @@ void BuildIndex(InputConfiguration *inputConfiguration)
 		fclose(file);
 	}
 }
+
+/*Lab 03*/
+
+char *CopyString(char * str, int size)
+{
+	char *s = NULL;
+	s = (char *)malloc(sizeof(char)*(size));
+	strncpy(s, str, size);
+	return s;
+}
+
+/*Constroi o vetor a partir do buffer, sendo que cada registro do vetor tem tamanho regSize, retorna quantos itens o vetor tem*/
+int BuildVector(char *buffer, char *vet[], int regSize)
+{
+	int i, j, k;
+	char *temp = NULL;
+	temp = (char *)malloc(sizeof(char)*(regSize + 1));
+
+	i = 0;
+	j = 0;
+	k = 0;
+	while (buffer[i] != '\0')
+	{
+		if(buffer[i] != '\n')
+		{
+			temp[k] = buffer[i];
+			k++;
+		}
+		else
+		{
+			vet[j] = CopyString(temp, k);
+			j++;
+			k=0;
+		}
+		i++;
+	}
+	return j;
+}
+
+/*Ordena em memória com bubblesort sempre considerando que o campo é um texto*/
+void Order(char *vet[], int vetSize, int field)
+{
+	int iniPos, finPos, i, j, size;
+	char *v1, *v2, *aux;	
+
+	if(field == 2)
+	{
+		iniPos = GetConfig()->next->initialPosition;
+		finPos = GetConfig()->next->finalPosition;
+	}else 
+	{
+		iniPos = GetConfig()->initialPosition;
+		finPos = GetConfig()->finalPosition;
+	}
+
+	size = finPos - iniPos + 1;
+
+	v1 = (char *)malloc(sizeof(char)*size);
+	v2 = (char *)malloc(sizeof(char)*size);
+
+	/*Bubble sort*/
+	for(i = 0; i < vetSize; i++)
+	{
+		for(j = 0; j < vetSize - 1; j++)
+		{
+			strncpy(v1,vet[j], size);
+			strncpy(v2,vet[j+1], size);
+			if(strcmp(v1,v2) > 0)
+			{
+				aux = vet[j];
+				vet[j] = vet[j+1];
+				vet[j+1] = aux;
+			}
+		}
+	}
+}
+
+void FreeVet(char *vet[], int size)
+{
+	int i;
+	for(i = 0; i < size; i++)
+	{
+		free(vet[i]);
+	}
+}
+
+void WriteFile(char *vet[], int vetSize, int numVet)
+{
+	FILE *file;
+	int i;
+	char str[4];
+	char bl[1];
+	bl[0] = '\n';
+	sprintf(str, "t%d", numVet);
+	file = fopen(str, "w");
+	for(i = 0; i < vetSize; i++)
+	{
+		WriteString(file, vet[i]);
+		if(i != vetSize - 1)
+		{
+			fwrite(bl,1,1,file);
+		}
+	}
+	fclose(file);
+	
+}
+
+/*Divide o arquivo e chama a ordena para cada trecho do arquivo e retorna o numero de arquivos no qual foi dividido... obs: as partes do arquivo são t#*/
+int Split(char *input, int memSize, int field)
+{
+	int fileSize, numFiles, readSize, maxRegs, i, readed, vetSize;
+	char *buffer, **vet;
+	FILE *file;
+
+	maxRegs = memSize / (GetRegisterSize() + 1); /*Numero maximo de registros por pagina*/
+	fileSize = FileSize(input); /*Tamanho do arquivo*/
+	readSize = (maxRegs * (GetRegisterSize() + 1)); /*Tamanho em bytes de cada conjunto de registros não quebrados, ou seja, registros inteiros que podem ser guardados na memória*/
+	numFiles = fileSize / readSize; /*Numero de arquivos necessários para pegar todos registros*/
+	if (fileSize % readSize > 0)
+	{
+		numFiles++;
+	}
+	file = fopen(input, "r");
+	
+    buffer = (char *)malloc(sizeof(char)*readSize + 1);
+	/*Iteração pra cada arquivo*/
+	for(i = 0; i < numFiles; i++)
+	{
+		vet = (char **)malloc(sizeof(char)*maxRegs);
+		readed = fread(buffer, 1, readSize, file);
+		buffer[readed] = '\0';
+		vetSize = BuildVector(buffer, vet, GetRegisterSize() + 1);
+		Order(vet, vetSize, field);
+		WriteFile(vet, vetSize, i);
+		FreeVet(vet,vetSize);
+	}
+	fclose(file);
+	return numFiles;	
+}
+
+/*Renomeia os arquivos de entrada e nomeia o arquivos de saida automaticamente como i/2*/
+void MergeTwo(char *i1, char *i2, int i, int field)
+{
+	FILE *f1, *f2, *output;
+	char outName[4], c1, c2, bl[1];
+	char *reg1, *reg2, *key1, *key2;
+	int iniPos, finPos, keySize, regSize;
+
+	reg1 = reg2 = key1 = key2 = NULL;
+
+
+	bl[0] = '\n';
+
+	if(field == 2)
+	{
+		iniPos = GetConfig()->next->initialPosition;
+		finPos = GetConfig()->next->finalPosition;
+	}
+	else 
+	{
+		iniPos = GetConfig()->initialPosition;
+		finPos = GetConfig()->finalPosition;
+	}
+
+	keySize = finPos - iniPos + 1;
+	regSize = GetRegisterSize();
+
+	key1 = (char *)malloc(sizeof(char)*keySize);
+	key2 = (char *)malloc(sizeof(char)*keySize);
+
+	reg1 = (char *)malloc(sizeof(char)*(regSize + 1));
+    reg2 = (char *)malloc(sizeof(char)*(regSize + 1));
+	
+	/*Renomeia os arquivos de entrada*/
+	rename(i1, "temp1");
+	rename(i2, "temp2");
+	/*Define o nome para o novo arquivo de saida*/
+	sprintf(outName, "t%d", i/2);
+	/*Abre os arquivos*/
+	f1 = fopen("temp1", "r");
+	f2 = fopen("temp2", "r");
+	output = fopen(outName, "w");
+
+	/*Faz o merge*/
+	fgets(reg1, regSize+1, f1);
+	fgets(reg2, regSize+1, f2);
+
+	while(c1 != EOF && c2 != EOF)
+	{
+		strncpy(key1,reg1, keySize);
+		strncpy(key2,reg2, keySize);
+		if(strcmp(key1,key2) > 0)
+		{
+			c2 = getc(f2);
+			WriteString(output, reg2);
+			fwrite(bl,1,1,output);
+			fgets(reg2, regSize+1, f2);
+		}
+		else
+		{
+			c1 = getc(f1);
+			WriteString(output, reg1);
+			fwrite(bl,1,1,output);
+			fgets(reg1, regSize+1, f1);
+		}
+	}
+
+	/*Copia todo o Arq 1*/
+	if(c1 != EOF)
+	{
+		while(c1 != EOF)
+		{
+			c1 = getc(f1);
+			WriteString(output, reg1);
+			if(c1 != EOF)
+			{
+				fwrite(bl,1,1,output);
+			}
+			fgets(reg1, regSize+1, f1);
+		}
+	}
+	if(c2 != EOF)
+	{
+		while(c2 != EOF)
+		{
+			c2 = getc(f2);
+			WriteString(output, reg2);
+			if(c2 != EOF)
+			{
+				fwrite(bl,1,1,output);
+			}
+			fgets(reg2, regSize+1, f2);
+		}
+	}
+
+
+	free(key1);
+	free(key2);
+	free(reg1);
+	free(reg2);
+	fclose(output);
+	fclose(f1);
+	fclose(f2);
+	/*Deleta os arquivos de entrada*/
+	remove("temp1");
+	remove("temp2");
+}
+
+/*Faz o merge no arquivo output do numero de arquivos que foram passados*/
+void Merge(char *output, int numFiles, int field)
+{
+	int i;
+	char a[4], b[4];
+
+	/*Vai mergeando de 2 em 2 os arquivos*/
+	if(numFiles > 1)
+	{
+		for(i = 0; i < numFiles; i=i+2)
+		{
+			if(numFiles - i != 1)
+			{
+				sprintf(a, "t%d", i);
+				sprintf(b, "t%d", i+1);
+				MergeTwo(a, b, i, field);
+			}
+			else
+			{
+				sprintf(a, "t%d", i);
+				sprintf(b, "t%d", i/2);
+				rename(a, b);
+			}
+	
+		}
+		/*Apos mergear todos os arquivos, verfica quantos arquivos resultantes sobraram e recursa, em caso de sobrar 1 arquivo, renomeia para output*/
+		if(numFiles % 2 > 0)
+		{
+			Merge(output, (numFiles/2) + 1,field);
+		}
+		else
+		{
+			if(numFiles != 2)
+			{
+				Merge(output, (numFiles/2), field);
+			}
+			else
+			{
+				rename("t0", output);
+			}
+			
+		}
+	}
+	else
+	{
+		rename("t0", output);
+	}
+}
+
+/*Faz o sort*/
+void Sort(char *input, char *output, int memSize, int field)
+{
+	Merge(output, Split(input, memSize, field), field);
+}
+

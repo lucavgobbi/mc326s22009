@@ -37,13 +37,12 @@ int main(int argc, char * argv[])
 	LoadTranslation(translateFile());
 
 	/*Verifica��o*/
-	if(Error_InputParameters(argc, argv) || Error_FileOpen(argv[1]) || Error_FileOpen(argv[2]))
+	if(Error_InputParameters(argc, argv) || Error_FileOpen(argv[1]) )
 	{
 		return 0;
 	}
 
-	LoadInputConfiguration(argv[1]);
-
+	LoadInputConfiguration(inputConf());
 	/*Mantem o menu em loop at� que a op��o de saida seja digitada*/
 	menuOption = Menu();
 	while(menuOption != '3')
@@ -52,9 +51,11 @@ int main(int argc, char * argv[])
 		{
 			case '1' : 
 				{
+					Sort(argv[1], argv[2], atoi(argv[3]), 1);
 				} break;
 			case '2' :
 				{
+					Sort(argv[1], argv[2], atoi(argv[3]), 2);
 				} break;
 		}
 		menuOption = Menu();
