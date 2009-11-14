@@ -17,5 +17,7 @@ void TestCfg();
 
 void FreeInputConfiguration();
 
+int GetRegisterSize();
+
 /*Retorna a lista de config*/
 InputConfiguration *GetConfig();

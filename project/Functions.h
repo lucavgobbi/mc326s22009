@@ -38,3 +38,6 @@ void FindReg(char *input,InputConfiguration *inputConf, char *compare);
 
 /*Localiza um registro usando busca binaria em disco e imprime na tela*/
 void SearchInDisk(char * value, char * dataFilePath, InputConfiguration *inputConfiguration);
+
+/*Faz a ordenação usando Merge Co-processado*/
+void Sort(char *input, char *output, int memSize, int field);
