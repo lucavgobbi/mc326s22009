@@ -598,7 +598,8 @@ char *CopyString(char * str, int size)
 {
 	char *s = NULL;
 	s = (char *)malloc(sizeof(char)*(size));
-	strncpy(s, str, size);
+    s[0] = '\0';
+	strcpy(s, str);
 	return s;
 }
 
@@ -621,6 +622,7 @@ int BuildVector(char *buffer, char *vet[], int regSize)
 		}
 		else
 		{
+            temp[k] = '\0';
 			vet[j] = CopyString(temp, k);
 			j++;
 			k=0;
@@ -705,11 +707,13 @@ int Split(char *input, int memSize, int field)
 	char *buffer, **vet;
 	FILE *file;
 
+	vet = NULL;
+
 	maxRegs = memSize / (GetRegisterSize() + 1); /*Numero maximo de registros por pagina*/
 	fileSize = FileSize(input); /*Tamanho do arquivo*/
 	readSize = (maxRegs * (GetRegisterSize() + 1)); /*Tamanho em bytes de cada conjunto de registros não quebrados, ou seja, registros inteiros que podem ser guardados na memória*/
 	numFiles = fileSize / readSize; /*Numero de arquivos necessários para pegar todos registros*/
-	if (fileSize % readSize > 0)
+	if (fileSize % readSize > 1)
 	{
 		numFiles++;
 	}
@@ -719,7 +723,7 @@ int Split(char *input, int memSize, int field)
 	/*Iteração pra cada arquivo*/
 	for(i = 0; i < numFiles; i++)
 	{
-		vet = (char **)malloc(sizeof(char)*maxRegs);
+		vet = (char **)malloc(sizeof(char *)*maxRegs);
 		readed = fread(buffer, 1, readSize, file);
 		buffer[readed] = '\0';
 		vetSize = BuildVector(buffer, vet, GetRegisterSize() + 1);

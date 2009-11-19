@@ -1,5 +1,8 @@
 RA|N|1|6|S|RA Obrigatorio|
-Teste|X|7|32|S|Nome Obrigatorio|
-Cidade|X|33|46|N|Cidade Nao Obrigatorio|
-Telefone|X|47|54|S|Telefone Obrigatorio|
-FimRegistro|X|55|55|S|#|
+Teste|X|7|31|S|Nome Obrigatorio|
+Cidade|X|32|46|N|Cidade Nao Obrigatorio|
+Telefone|X|47|55|S|Telefone Obrigatorio|
+Telefone2|X|56|64|S|Telefone Obrigatorio|
+Sexo|X|65|66|S|Telefone Obrigatorio|
+Curso|X|67|68|S|Telefone Obrigatorio|
+FimRegistro|X|69|69|S|#|
