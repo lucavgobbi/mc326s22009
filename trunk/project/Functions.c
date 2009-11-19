@@ -739,7 +739,7 @@ int Split(char *input, int memSize, int field)
 void MergeTwo(char *i1, char *i2, int i, int field)
 {
 	FILE *f1, *f2, *output;
-	char outName[4], c1, c2, bl[1];
+	char outName[5],tempName[5], c1, c2, bl[1];
 	char *reg1, *reg2, *key1, *key2;
 	int iniPos, finPos, keySize, regSize;
 
@@ -769,14 +769,13 @@ void MergeTwo(char *i1, char *i2, int i, int field)
     reg2 = (char *)malloc(sizeof(char)*(regSize + 1));
 	
 	/*Renomeia os arquivos de entrada*/
-	rename(i1, "temp1");
-	rename(i2, "temp2");
 	/*Define o nome para o novo arquivo de saida*/
 	sprintf(outName, "t%d", i/2);
+	sprintf(tempName, "s%d", i);
 	/*Abre os arquivos*/
-	f1 = fopen("temp1", "r");
-	f2 = fopen("temp2", "r");
-	output = fopen(outName, "w");
+	f1 = fopen(i1, "r");
+	f2 = fopen(i2, "r");
+	output = fopen(tempName, "w");
 
 	/*Faz o merge*/
 	fgets(reg1, regSize+1, f1);
@@ -839,8 +838,9 @@ void MergeTwo(char *i1, char *i2, int i, int field)
 	fclose(f1);
 	fclose(f2);
 	/*Deleta os arquivos de entrada*/
-	remove("temp1");
-	remove("temp2");
+	remove(i1);
+	remove(i2);
+	rename(tempName,outName);
 }
 
 /*Faz o merge no arquivo output do numero de arquivos que foram passados*/
