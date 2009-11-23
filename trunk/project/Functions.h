@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include "Analizer.h"
 
 /*Fun��o que deve ler o arquivo de entrada baseado nas configura��es definidas na lista inputConfioguration
 e escrever o arquivo de saida em outputfile, lembrando sempre de utilizar o separador dinamico que pode ser obtido com, (char)separator()[0]*/
@@ -40,4 +41,4 @@ void FindReg(char *input,InputConfiguration *inputConf, char *compare);
 void SearchInDisk(char * value, char * dataFilePath, InputConfiguration *inputConfiguration);
 
 /*Faz a ordenação usando Merge Co-processado*/
-void Sort(char *input, char *output, int memSize, int field);
+void Sort(char *input, char *output, int memSize, int field, int *counter, int *countern, int *counterr, int *counterrf, int *numfile, int *nummerge);

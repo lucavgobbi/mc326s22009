@@ -3,6 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 #include "Functions.h"
+#include "Analizer.h"
+#include <time.h>
 
 /*Fun��o responsavel por imprimir o menu e retornar apenas uma op��o valida*/
 char Menu()
@@ -26,7 +28,17 @@ int main(int argc, char * argv[])
 {
 	/*Variaveis*/
 	char menuOption; /*Guarda o valor digitado*/
+	int *counter, *countern, *counterr, *counterrf, *numfile, *nummerge;
+	clock_t endtime,starttime;
 
+	counter = (int *)malloc(sizeof(int));
+	countern = (int *)malloc(sizeof(int));
+	counterr = (int *)malloc(sizeof(int));
+	counterrf = (int *)malloc(sizeof(int));
+	numfile = (int *)malloc(sizeof(int));
+	nummerge = (int *)malloc(sizeof(int));
+
+	starttime = Time();
 	/*Carrega as configura��es*/
 	if(!LoadConfig())
 	{
@@ -51,11 +63,11 @@ int main(int argc, char * argv[])
 		{
 			case '1' : 
 				{
-					Sort(argv[1], argv[2], atoi(argv[3]), 1);
+					Sort(argv[1], argv[2], atoi(argv[3]), 1, counter, countern, counterr, counterrf, numfile, nummerge);
 				} break;
 			case '2' :
 				{
-					Sort(argv[1], argv[2], atoi(argv[3]), 2);
+					Sort(argv[1], argv[2], atoi(argv[3]), 2, counter, countern, counterr, counterrf, numfile, nummerge);
 				} break;
 		}
 		menuOption = Menu();
@@ -63,5 +75,8 @@ int main(int argc, char * argv[])
 	FreeTranslate();
 	FreeInputConfiguration();
 	FreeConfig();
+	endtime=Time();/*
+	print((long double)endtime/CLOCKS_PER_SEC,(long double)starttime/CLOCKS_PER_SEC,argv[1],counter,countern,counterr,counterrf,numfile,nummerge);*/
+	CreateReport((long double)endtime/CLOCKS_PER_SEC,(long double)starttime/CLOCKS_PER_SEC,argv[1],counter,countern,counterr,counterrf,numfile,nummerge);
 	return 0;
 }
