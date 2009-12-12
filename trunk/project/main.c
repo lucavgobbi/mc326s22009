@@ -6,6 +6,8 @@
 #include "Analizer.h"
 #include <time.h>
 
+
+
 /*Fun��o responsavel por imprimir o menu e retornar apenas uma op��o valida*/
 char Menu()
 {
@@ -16,7 +18,7 @@ char Menu()
 	printf(Translate(MenuExit));
 	scanf(" %c", &menuOption);
 	/*Fica lendo at� que uma op��o valida seja digitada*/
-	while(menuOption < 49 || menuOption > 51)
+	while(menuOption < 49 || menuOption > 52)
 	{
 		printf(Translate(MenuError));
 		scanf(" %c", &menuOption);	
@@ -28,17 +30,6 @@ int main(int argc, char * argv[])
 {
 	/*Variaveis*/
 	char menuOption; /*Guarda o valor digitado*/
-	int *counter, *countern, *counterr, *counterrf, *numfile, *nummerge;
-	clock_t endtime,starttime;
-
-	counter = (int *)malloc(sizeof(int));
-	countern = (int *)malloc(sizeof(int));
-	counterr = (int *)malloc(sizeof(int));
-	counterrf = (int *)malloc(sizeof(int));
-	numfile = (int *)malloc(sizeof(int));
-	nummerge = (int *)malloc(sizeof(int));
-
-	starttime = Time();
 	/*Carrega as configura��es*/
 	if(!LoadConfig())
 	{
@@ -55,28 +46,33 @@ int main(int argc, char * argv[])
 	}
 
 	LoadInputConfiguration(inputConf());
+	
+	CreateRoot();
+	
 	/*Mantem o menu em loop at� que a op��o de saida seja digitada*/
 	menuOption = Menu();
 	while(menuOption != '3')
 	{
 		switch (menuOption)
 		{
-			case '1' : 
+			case '1' :
 				{
-					Sort(argv[1], argv[2], atoi(argv[3]), 1, counter, countern, counterr, counterrf, numfile, nummerge);
-				} break;
+					PrimaryKeyFile(argv[1], GetConfig());
+				}
 			case '2' :
 				{
-					Sort(argv[1], argv[2], atoi(argv[3]), 2, counter, countern, counterr, counterrf, numfile, nummerge);
-				} break;
+					InsertTree(7, 7000, 0);
+					InsertTree(1, 1000, 0);
+					InsertTree(3, 3000, 0);
+					InsertTree(2, 2000, 0);
+					InsertTree(5, 5000, 0);
+					InsertTree(6, 6000, 0);
+				}
 		}
 		menuOption = Menu();
 	}
 	FreeTranslate();
 	FreeInputConfiguration();
 	FreeConfig();
-	endtime=Time();/*
-	print((long double)endtime/CLOCKS_PER_SEC,(long double)starttime/CLOCKS_PER_SEC,argv[1],counter,countern,counterr,counterrf,numfile,nummerge);*/
-	CreateReport((long double)endtime/CLOCKS_PER_SEC,(long double)starttime/CLOCKS_PER_SEC,argv[1],counter,countern,counterr,counterrf,numfile,nummerge);
 	return 0;
 }

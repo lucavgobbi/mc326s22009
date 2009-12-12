@@ -9,7 +9,7 @@ O padr�o de nome � Error_Descri��o da verifica��o*/
 
 int Error_InputParameters(int argc, char * argv[])
 {
-	if(argc != 4)
+	if(argc != 2)
 	{
 		printf("Incorrect parameters number");
 		return 1;

@@ -1,6 +1,22 @@
 #include "Functions.h"
 #include "Analizer.h"
 
+typedef struct {
+  int root;
+  int size;
+} BTree;
+
+typedef struct {
+  int nKeys;
+  int keys[9];
+  int position[9];
+  int childs[10];
+  int leaf;
+  int id;
+} BTNode;
+
+int ORDER = 5;
+int ParentId = -1;
 /*=======================================================FUNCOES AUXILIARES====================================================*/
 
 /*Funcao que recebe um campo no formato fixo e retorna um ponteiro pra um campo do modo variavel*/
@@ -915,3 +931,270 @@ void Sort(char *input, char *output, int memSize, int field, int *counter, int *
 	Merge(output, Split(input, memSize, field, counter, countern, counterr, counterrf, numfile, nummerge), field, counter, countern, counterr, counterrf, numfile, nummerge);
 }
 
+/*========================== LAB 4 ==================================*/
+
+/*Grava os dados do no em memoria para o arquivo*/
+void WriteNode(BTNode *node) 
+{
+	FILE *file;
+	char filename[10];
+	int i;
+	
+	sprintf(filename, "%d%s", node->id, "TREE");
+	file = fopen(filename, "w"); 
+	
+	  /*Gravacao se e folha ou no*/
+	fprintf(file, "%d\n", node->leaf);
+
+	
+	/*Gravacao do numero de chaves*/
+	fprintf(file, "%d\n", node->nKeys);
+
+	/*Gravacao das chaves*/
+	for (i = 0; i < node->nKeys; ++i) 
+	{
+		fprintf(file, "%d ", node->keys[i]);
+	}
+	
+	fprintf(file, "\n");
+	
+	/*Gravacao das chaves*/
+	for (i = 0; i < node->nKeys; ++i) 
+	{
+		fprintf(file, "%d ", node->position[i]);
+	}
+
+	fprintf(file, "\n");
+
+	/*Gravacao dos apontadores ou nrrs, caso seja folha*/
+	for (i = 0; i <= node->nKeys; ++i) 
+	{
+		fprintf(file, "%d ", node->childs[i]);
+	}
+
+	fprintf(file, "\n");
+	fclose(file); 
+}
+
+int ReadNode(BTNode *node, int nodeId) 
+{
+	  
+	FILE *file;
+	char filename[10];
+	int i;
+	
+	/*Colocando id do arquivo na estrutura*/
+	node->id = nodeId;
+	
+	sprintf(filename, "%d%s", nodeId, "TREE");
+	file = fopen(filename, "r");
+	
+	if (file) {
+		
+		fscanf(file, "%d", &node->leaf);
+		
+		fscanf(file, "%d", &node->nKeys);
+		
+		/*leitura das chaves*/
+		for ( i = 0; i < node->nKeys; ++i) 
+		{
+			fscanf(file, "%d", &node->keys[i]);
+		}
+		
+		for ( i = 0; i < node->nKeys; ++i) 
+		{
+			fscanf(file, "%d", &node->position[i]);
+		}
+		
+		for ( i = 0; i <= node->nKeys; ++i) 
+		{
+			fscanf(file, "%d", &node->childs[i]);
+		}
+
+		fclose(file); 
+		return 1;
+		
+	} 
+	else 
+	{
+		return 0; /* Nao existe o arquivo. */
+	}
+
+}
+
+BTNode * CreateNode() 
+{
+  BTNode * temp = (BTNode*)malloc(sizeof(BTNode));
+  temp->nKeys = 0;
+  return temp;
+}
+
+void CreateRoot() 
+{
+	int i;
+	BTNode *root;
+	
+	root = CreateNode();
+	root->leaf = 1; /*A raiz é nó folha quando criada*/
+	root->id = 0;
+	for (i = 0; i < ORDER; i++) 
+	{
+		root->keys[i] = -1;
+		root->position[i] = -1;
+		root->childs[i] = -1;
+	}
+	root->childs[i] = -1;
+	
+	WriteNode(root);
+	free(root);
+}
+
+int SplitNode(int key, int pos, int nodeId)
+{
+	BTNode *node, *nodeParent;
+
+	node = CreateNode();
+	
+	/*Se tem um pai*/
+	if(ParentId > -1)
+	{
+		nodeParent = CreateNode();
+		ReadNode(node, nodeId);
+	}
+	else /*Se não tem pai, ou sejá, é raiz*/
+	{
+		
+	}
+	return 0;
+}
+
+void RootSplit(int key, int pos, int nodeId)
+{
+	int i, j;
+	BTNode *node, *root, *node2;
+	node = CreateNode();
+	root = CreateNode();
+	node2 = CreateNode();
+	
+	for (i = 0; i < ORDER; i++) 
+	{
+		root->keys[i] = -1;
+		root->position[i] = -1;
+		root->childs[i] = -1;
+		node2->keys[i] = -1;
+		node2->position[i] = -1;
+		node2->childs[i] = -1;
+	}
+	
+	ReadNode(node, nodeId);
+	i = ORDER/2;
+	j = 0;
+	
+	root->id = 0;
+	node->id = 1;
+	node2->id = 2;
+	
+	root->keys[0] = node->keys[i];
+	root->position[0] = node->position[i];
+	node->keys[i] = -1;
+	node->position[i] = -1;
+	
+	root->childs[0] = 1;
+	root->childs[1] = 2;
+	node->nKeys = i;
+	node2->nKeys = i-1;
+	/*Copia os itens*/
+	for(i = i+1; i < ORDER - 1; i++)
+	{
+		node2->keys[j] = node->keys[i];
+		node2->position[j] = node->position[i];
+		node->keys[i] = -1;
+		node->position[i] = -1;
+		j++;
+	}
+	
+	for(i = 0; i < ORDER - 1; i++)
+	{
+		node2->childs[i] = -1;
+		node->childs[i] = -1;
+	}
+	
+	root->nKeys = 1;
+	node->leaf = 1;
+	node2->leaf = 1;
+	
+	WriteNode(root);
+	WriteNode(node);
+	WriteNode(node2);
+	
+	free(root);
+	free(node);
+	free(node2);
+	
+	InsertTree(key, pos, 0);
+}
+
+int InsertTree(int key, int pos, int nodeId) 
+{
+	int i = 0, j, result = false, size, parent; /*, idChild*/
+	BTNode *node;
+
+	node = CreateNode();
+	ReadNode(node, nodeId);
+	parent = ParentId;
+	/*Procura a posição*/
+	while (node->keys[i] <= key && i < node->nKeys) 
+	{
+		i++;
+	}
+	
+	/*Se achou*/
+	if (i > 0)
+	{
+		if (node->keys[i-1] == key)
+		{
+			return result;
+		}
+	}
+	
+	/*se estiver em uma folha*/
+	if (node->leaf == 1)
+	{
+		/*Se não estourou a ordem*/
+		if(node->nKeys < ORDER-1)/* Abre espaco para a nova chave no vetor de chaves do noh. */
+		{
+			j = node->nKeys;
+			node->childs[j+1] = node->childs[j];
+			for(; j > i; j--) 
+			{
+				node->childs[j] = node->childs[j-1];
+				node->keys[j] = node->keys[j-1];
+				node->position[j] = node->position[j-1];
+			}
+			node->keys[i] = key;
+			node->position[i] = pos;
+
+			size = (node->nKeys)++;
+
+			WriteNode(node);
+			free(node);
+			result = 1;
+		}
+		else /*Faz o split*/
+		{
+			/*Se for pai*/
+			if (parent == -1)
+			{
+				RootSplit(key, pos, nodeId);
+			}
+		}
+	}
+	else /*Se não for folha procura a folha onde deve inserir*/
+	{
+		ParentId = nodeId;
+		result = InsertTree(key, pos, node->childs[i]);
+	}
+	
+	if (size == ORDER) return -1; /*Estouro, deve ser tratado, pois o estouro pode nao ser real*/
+	else return result;	
+}
