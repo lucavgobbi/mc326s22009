@@ -29,3 +29,4 @@ typedef struct CharPosition{
 	int index;
 }CharPosition;
 
+

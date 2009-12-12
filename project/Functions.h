@@ -42,3 +42,7 @@ void SearchInDisk(char * value, char * dataFilePath, InputConfiguration *inputCo
 
 /*Faz a ordenação usando Merge Co-processado*/
 void Sort(char *input, char *output, int memSize, int field, int *counter, int *countern, int *counterr, int *counterrf, int *numfile, int *nummerge);
+
+void CreateRoot() ;
+
+int InsertTree(int key, int pos, int nodeId) ;
