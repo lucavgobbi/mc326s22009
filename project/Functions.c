@@ -933,6 +933,53 @@ void Sort(char *input, char *output, int memSize, int field, int *counter, int *
 
 /*========================== LAB 4 ==================================*/
 
+void SetOrder(int order)
+{
+	ORDER = order;
+}
+
+void BatchInsert(char *inputFile, InputConfiguration *inputConfiguration)
+{
+	char *keyfix, *adress, *aux;
+	int registerSize, fieldSize, loopCounter=0;
+	FILE *input, *output;
+
+	fieldSize = (inputConfiguration->finalPosition) - (inputConfiguration->initialPosition) + 1;
+
+	input = fopen(inputFile,"r");
+	output = fopen("index","w");
+
+	if(input==NULL)
+	{
+		return;
+	}
+
+	aux = (char *)malloc(sizeof(char)*600);
+	adress = (char *)malloc(sizeof(char)*10);
+
+	while(feof(input)==0){
+		/*Copia o registro para aux*/
+		registerSize = CopyLine(input,aux);
+		/*Retorna o primeiro campo em key*/
+		keyfix = StringBreak(aux,fieldSize);
+		/*Retorna o endereco em adress*/
+		Adress (adress,registerSize,loopCounter);
+		/*Monta o formato do indice em key*/
+		IndexRegister(keyfix,adress);
+		/*Escreve key no arquivo*/
+		InsertTree(atol(keyfix), atol(adress), 0);
+	/*	WriteString(output,keyvar);*/
+		/*Conta o numero de loops*/
+		loopCounter++;
+		free(keyfix);
+	}
+
+	free(aux);
+	free(adress);
+	fclose(input);
+	fclose(output);
+}
+
 /*Grava os dados do no em memoria para o arquivo*/
 void WriteNode(BTNode *node) 
 {

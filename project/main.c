@@ -13,8 +13,7 @@ char Menu()
 {
 	char menuOption;
 	printf(Translate(MenuHeader));
-	printf(Translate(Menu1), GetConfig()->name);
-	printf(Translate(Menu2), GetConfig()->next->name);
+	printf(Translate(Menu1));
 	printf(Translate(MenuExit));
 	scanf(" %c", &menuOption);
 	/*Fica lendo at� que uma op��o valida seja digitada*/
@@ -47,6 +46,8 @@ int main(int argc, char * argv[])
 
 	LoadInputConfiguration(inputConf());
 	
+	SetOrder(atoi(argv[2]));
+	
 	CreateRoot();
 	
 	/*Mantem o menu em loop at� que a op��o de saida seja digitada*/
@@ -57,16 +58,7 @@ int main(int argc, char * argv[])
 		{
 			case '1' :
 				{
-					PrimaryKeyFile(argv[1], GetConfig());
-				}
-			case '2' :
-				{
-					InsertTree(7, 7000, 0);
-					InsertTree(1, 1000, 0);
-					InsertTree(3, 3000, 0);
-					InsertTree(2, 2000, 0);
-					InsertTree(5, 5000, 0);
-					InsertTree(6, 6000, 0);
+					BatchInsert(argv[1], GetConfig());
 				}
 		}
 		menuOption = Menu();
