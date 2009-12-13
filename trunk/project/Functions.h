@@ -46,3 +46,7 @@ void Sort(char *input, char *output, int memSize, int field, int *counter, int *
 void CreateRoot() ;
 
 int InsertTree(int key, int pos, int nodeId) ;
+
+void BatchInsert(char *inputFile, InputConfiguration *inputConfiguration);
+
+void SetOrder(int order);
